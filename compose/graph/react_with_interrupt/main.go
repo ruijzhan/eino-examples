@@ -34,7 +34,10 @@ import (
 )
 
 func main() {
-	compose.RegisterSerializableType[myState]("state")
+	err := compose.RegisterSerializableType[myState]("state")
+	if err != nil {
+		log.Fatalf("RegisterSerializableType failed: %v", err)
+	}
 
 	ctx := context.Background()
 	runner, err := composeGraph[map[string]any, *schema.Message](
@@ -70,7 +73,7 @@ func main() {
 			fmt.Printf("will call tool: %s, arguments: %s\n", tc.Function.Name, tc.Function.Arguments)
 			fmt.Print("Are the arguments as expected? (y/n): ")
 			var response string
-			fmt.Scanln(&response)
+			_, _ = fmt.Scanln(&response)
 
 			if strings.ToLower(response) == "n" {
 				fmt.Print("Please enter the modified arguments: ")
