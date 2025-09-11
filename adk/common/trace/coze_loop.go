@@ -36,7 +36,7 @@ func AppendCozeLoopCallbackIfConfigured(_ context.Context) (closeFn CloseFn, sta
 	// COZELOOP_WORKSPACE_ID=your workspace id
 	// COZELOOP_API_TOKEN=your token
 
-	wsID := os.Getenv("COZELOOP_WORKSPACE_ID")
+	wsID := os.Getenv("COZELOOP_WORKSPACE_ID") // use cozeloop trace, from https://loop.coze.cn/open/docs/cozeloop/go-sdk#4a8c980e
 	apiKey := os.Getenv("COZELOOP_API_TOKEN")
 	if wsID == "" || apiKey == "" {
 		return func(ctx context.Context) {
