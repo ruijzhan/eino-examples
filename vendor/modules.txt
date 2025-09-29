@@ -1,0 +1,477 @@
+# github.com/PuerkitoBio/goquery v1.10.3
+## explicit; go 1.23.0
+github.com/PuerkitoBio/goquery
+# github.com/andybalholm/cascadia v1.3.3
+## explicit; go 1.16
+github.com/andybalholm/cascadia
+# github.com/aymerick/douceur v0.2.0
+## explicit
+github.com/aymerick/douceur/css
+github.com/aymerick/douceur/parser
+# github.com/bahlo/generic-list-go v0.2.0
+## explicit; go 1.18
+github.com/bahlo/generic-list-go
+# github.com/bluele/gcache v0.0.2
+## explicit; go 1.15
+github.com/bluele/gcache
+# github.com/buger/jsonparser v1.1.1
+## explicit; go 1.13
+github.com/buger/jsonparser
+# github.com/bytedance/sonic v1.14.0
+## explicit; go 1.17
+github.com/bytedance/sonic
+github.com/bytedance/sonic/ast
+github.com/bytedance/sonic/decoder
+github.com/bytedance/sonic/encoder
+github.com/bytedance/sonic/internal/caching
+github.com/bytedance/sonic/internal/compat
+github.com/bytedance/sonic/internal/cpu
+github.com/bytedance/sonic/internal/decoder/api
+github.com/bytedance/sonic/internal/decoder/consts
+github.com/bytedance/sonic/internal/decoder/errors
+github.com/bytedance/sonic/internal/decoder/jitdec
+github.com/bytedance/sonic/internal/decoder/optdec
+github.com/bytedance/sonic/internal/encoder
+github.com/bytedance/sonic/internal/encoder/alg
+github.com/bytedance/sonic/internal/encoder/ir
+github.com/bytedance/sonic/internal/encoder/vars
+github.com/bytedance/sonic/internal/encoder/vm
+github.com/bytedance/sonic/internal/encoder/x86
+github.com/bytedance/sonic/internal/envs
+github.com/bytedance/sonic/internal/jit
+github.com/bytedance/sonic/internal/native
+github.com/bytedance/sonic/internal/native/avx2
+github.com/bytedance/sonic/internal/native/neon
+github.com/bytedance/sonic/internal/native/sse
+github.com/bytedance/sonic/internal/native/types
+github.com/bytedance/sonic/internal/optcaching
+github.com/bytedance/sonic/internal/resolver
+github.com/bytedance/sonic/internal/rt
+github.com/bytedance/sonic/internal/utils
+github.com/bytedance/sonic/option
+github.com/bytedance/sonic/unquote
+github.com/bytedance/sonic/utf8
+# github.com/bytedance/sonic/loader v0.3.0
+## explicit; go 1.16
+github.com/bytedance/sonic/loader
+github.com/bytedance/sonic/loader/internal/abi
+github.com/bytedance/sonic/loader/internal/iasm/expr
+github.com/bytedance/sonic/loader/internal/iasm/x86_64
+github.com/bytedance/sonic/loader/internal/rt
+# github.com/cenkalti/backoff/v4 v4.3.0
+## explicit; go 1.18
+github.com/cenkalti/backoff/v4
+# github.com/cloudwego/base64x v0.1.5
+## explicit; go 1.16
+github.com/cloudwego/base64x
+github.com/cloudwego/base64x/internal/native
+github.com/cloudwego/base64x/internal/native/avx2
+github.com/cloudwego/base64x/internal/native/sse
+github.com/cloudwego/base64x/internal/rt
+# github.com/cloudwego/eino v0.5.0
+## explicit; go 1.18
+github.com/cloudwego/eino/adk
+github.com/cloudwego/eino/adk/prebuilt/planexecute
+github.com/cloudwego/eino/adk/prebuilt/supervisor
+github.com/cloudwego/eino/callbacks
+github.com/cloudwego/eino/components
+github.com/cloudwego/eino/components/document
+github.com/cloudwego/eino/components/document/parser
+github.com/cloudwego/eino/components/embedding
+github.com/cloudwego/eino/components/indexer
+github.com/cloudwego/eino/components/model
+github.com/cloudwego/eino/components/prompt
+github.com/cloudwego/eino/components/retriever
+github.com/cloudwego/eino/components/tool
+github.com/cloudwego/eino/components/tool/utils
+github.com/cloudwego/eino/compose
+github.com/cloudwego/eino/flow/agent
+github.com/cloudwego/eino/flow/agent/multiagent/host
+github.com/cloudwego/eino/flow/agent/react
+github.com/cloudwego/eino/flow/retriever/multiquery
+github.com/cloudwego/eino/flow/retriever/router
+github.com/cloudwego/eino/flow/retriever/utils
+github.com/cloudwego/eino/internal
+github.com/cloudwego/eino/internal/callbacks
+github.com/cloudwego/eino/internal/generic
+github.com/cloudwego/eino/internal/gmap
+github.com/cloudwego/eino/internal/gslice
+github.com/cloudwego/eino/internal/safe
+github.com/cloudwego/eino/internal/serialization
+github.com/cloudwego/eino/schema
+github.com/cloudwego/eino/utils/callbacks
+# github.com/cloudwego/eino-ext/callbacks/cozeloop v0.1.4
+## explicit; go 1.23.0
+github.com/cloudwego/eino-ext/callbacks/cozeloop
+github.com/cloudwego/eino-ext/callbacks/cozeloop/internal/async
+github.com/cloudwego/eino-ext/callbacks/cozeloop/internal/consts
+# github.com/cloudwego/eino-ext/components/document/parser/html v0.0.0-20250117061805-cd80d1780d76
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/components/document/parser/html
+# github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20250117061805-cd80d1780d76
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/components/document/parser/pdf
+# github.com/cloudwego/eino-ext/components/model/ark v0.1.22
+## explicit; go 1.23.0
+github.com/cloudwego/eino-ext/components/model/ark
+# github.com/cloudwego/eino-ext/components/model/deepseek v0.0.0-20250826125654-37d4a5029810
+## explicit; go 1.24.0
+github.com/cloudwego/eino-ext/components/model/deepseek
+# github.com/cloudwego/eino-ext/components/model/ollama v0.1.2
+## explicit; go 1.24.0
+github.com/cloudwego/eino-ext/components/model/ollama
+# github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250826125654-37d4a5029810
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/components/model/openai
+# github.com/cloudwego/eino-ext/components/retriever/volc_vikingdb v0.0.0-20250319082935-6219ec437e56
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/components/retriever/volc_vikingdb
+# github.com/cloudwego/eino-ext/components/tool/duckduckgo/v2 v2.0.0-20250826125654-37d4a5029810
+## explicit; go 1.23.0
+github.com/cloudwego/eino-ext/components/tool/duckduckgo/v2
+# github.com/cloudwego/eino-ext/devops v0.1.7
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/devops
+github.com/cloudwego/eino-ext/devops/internal/apihandler
+github.com/cloudwego/eino-ext/devops/internal/apihandler/types
+github.com/cloudwego/eino-ext/devops/internal/model
+github.com/cloudwego/eino-ext/devops/internal/service
+github.com/cloudwego/eino-ext/devops/internal/utils/generic
+github.com/cloudwego/eino-ext/devops/internal/utils/log
+github.com/cloudwego/eino-ext/devops/internal/utils/safego
+github.com/cloudwego/eino-ext/devops/model
+# github.com/cloudwego/eino-ext/libs/acl/openai v0.0.0-20250826113018-8c6f6358d4bb
+## explicit; go 1.18
+github.com/cloudwego/eino-ext/libs/acl/openai
+# github.com/cohesion-org/deepseek-go v1.3.2
+## explicit; go 1.24.0
+github.com/cohesion-org/deepseek-go
+github.com/cohesion-org/deepseek-go/constants
+github.com/cohesion-org/deepseek-go/utils
+# github.com/corpix/uarand v0.2.0
+## explicit; go 1.17
+github.com/corpix/uarand
+# github.com/coze-dev/cozeloop-go v0.1.11
+## explicit; go 1.18
+github.com/coze-dev/cozeloop-go
+github.com/coze-dev/cozeloop-go/entity
+github.com/coze-dev/cozeloop-go/internal
+github.com/coze-dev/cozeloop-go/internal/consts
+github.com/coze-dev/cozeloop-go/internal/httpclient
+github.com/coze-dev/cozeloop-go/internal/idgen
+github.com/coze-dev/cozeloop-go/internal/logger
+github.com/coze-dev/cozeloop-go/internal/prompt
+github.com/coze-dev/cozeloop-go/internal/trace
+github.com/coze-dev/cozeloop-go/internal/trace/model
+github.com/coze-dev/cozeloop-go/internal/util
+# github.com/coze-dev/cozeloop-go/spec v0.1.4
+## explicit; go 1.18
+github.com/coze-dev/cozeloop-go/spec/tracespec
+# github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
+## explicit
+github.com/davecgh/go-spew/spew
+# github.com/dslipak/pdf v0.0.2
+## explicit
+github.com/dslipak/pdf
+# github.com/dustin/go-humanize v1.0.1
+## explicit; go 1.16
+github.com/dustin/go-humanize
+# github.com/eino-contrib/jsonschema v1.0.0
+## explicit; go 1.18
+github.com/eino-contrib/jsonschema
+# github.com/evanphx/json-patch v0.5.2
+## explicit; go 1.14
+github.com/evanphx/json-patch
+# github.com/getkin/kin-openapi v0.118.0
+## explicit; go 1.16
+github.com/getkin/kin-openapi/openapi3
+# github.com/go-logr/logr v1.4.2
+## explicit; go 1.18
+# github.com/go-openapi/jsonpointer v0.21.1
+## explicit; go 1.20
+github.com/go-openapi/jsonpointer
+# github.com/go-openapi/swag v0.23.1
+## explicit; go 1.20
+github.com/go-openapi/swag
+# github.com/golang-jwt/jwt v3.2.2+incompatible
+## explicit
+github.com/golang-jwt/jwt
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid
+# github.com/goph/emperror v0.17.2
+## explicit; go 1.12
+github.com/goph/emperror
+# github.com/gorilla/css v1.0.1
+## explicit; go 1.20
+github.com/gorilla/css/scanner
+# github.com/gorilla/mux v1.8.1
+## explicit; go 1.20
+github.com/gorilla/mux
+# github.com/invopop/yaml v0.3.1
+## explicit; go 1.14
+github.com/invopop/yaml
+# github.com/jmespath/go-jmespath v0.4.0
+## explicit; go 1.14
+github.com/jmespath/go-jmespath
+# github.com/joho/godotenv v1.5.1
+## explicit; go 1.12
+github.com/joho/godotenv
+# github.com/josharian/intern v1.0.0
+## explicit; go 1.5
+github.com/josharian/intern
+# github.com/json-iterator/go v1.1.12
+## explicit; go 1.12
+github.com/json-iterator/go
+# github.com/klauspost/cpuid/v2 v2.3.0
+## explicit; go 1.22
+github.com/klauspost/cpuid/v2
+# github.com/mailru/easyjson v0.9.0
+## explicit; go 1.20
+github.com/mailru/easyjson/buffer
+github.com/mailru/easyjson/jlexer
+github.com/mailru/easyjson/jwriter
+# github.com/matoous/go-nanoid v1.5.1
+## explicit; go 1.15
+github.com/matoous/go-nanoid
+# github.com/mattn/go-colorable v0.1.14
+## explicit; go 1.18
+# github.com/meguminnnnnnnnn/go-openai v0.0.0-20250821095446-07791bea23a0
+## explicit; go 1.18
+github.com/meguminnnnnnnnn/go-openai
+github.com/meguminnnnnnnnn/go-openai/internal
+github.com/meguminnnnnnnnn/go-openai/jsonschema
+# github.com/microcosm-cc/bluemonday v1.0.27
+## explicit; go 1.19
+github.com/microcosm-cc/bluemonday
+github.com/microcosm-cc/bluemonday/css
+# github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
+## explicit
+github.com/modern-go/concurrent
+# github.com/modern-go/reflect2 v1.0.2
+## explicit; go 1.12
+github.com/modern-go/reflect2
+# github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
+## explicit
+github.com/mohae/deepcopy
+# github.com/nikolalohinski/gonja v1.5.3
+## explicit; go 1.20
+github.com/nikolalohinski/gonja
+github.com/nikolalohinski/gonja/builtins
+github.com/nikolalohinski/gonja/builtins/statements
+github.com/nikolalohinski/gonja/config
+github.com/nikolalohinski/gonja/docs
+github.com/nikolalohinski/gonja/exec
+github.com/nikolalohinski/gonja/loaders
+github.com/nikolalohinski/gonja/nodes
+github.com/nikolalohinski/gonja/parser
+github.com/nikolalohinski/gonja/tokens
+github.com/nikolalohinski/gonja/utils
+# github.com/nikolalohinski/gonja/v2 v2.3.1
+## explicit; go 1.20
+github.com/nikolalohinski/gonja/v2
+github.com/nikolalohinski/gonja/v2/builtins
+github.com/nikolalohinski/gonja/v2/builtins/control_structures
+github.com/nikolalohinski/gonja/v2/builtins/methods
+github.com/nikolalohinski/gonja/v2/builtins/methods/pybool
+github.com/nikolalohinski/gonja/v2/builtins/methods/pyerrors
+github.com/nikolalohinski/gonja/v2/builtins/methods/pyfloat
+github.com/nikolalohinski/gonja/v2/builtins/methods/pyint
+github.com/nikolalohinski/gonja/v2/builtins/methods/pystring
+github.com/nikolalohinski/gonja/v2/config
+github.com/nikolalohinski/gonja/v2/docs
+github.com/nikolalohinski/gonja/v2/exec
+github.com/nikolalohinski/gonja/v2/loaders
+github.com/nikolalohinski/gonja/v2/nodes
+github.com/nikolalohinski/gonja/v2/parser
+github.com/nikolalohinski/gonja/v2/tokens
+github.com/nikolalohinski/gonja/v2/utils
+# github.com/ollama/ollama v0.11.4
+## explicit; go 1.24.0
+github.com/ollama/ollama/api
+github.com/ollama/ollama/auth
+github.com/ollama/ollama/envconfig
+github.com/ollama/ollama/format
+github.com/ollama/ollama/types/model
+github.com/ollama/ollama/version
+# github.com/openai/openai-go v1.10.1
+## explicit; go 1.21
+github.com/openai/openai-go/internal
+github.com/openai/openai-go/internal/apierror
+github.com/openai/openai-go/internal/apiform
+github.com/openai/openai-go/internal/apijson
+github.com/openai/openai-go/internal/apiquery
+github.com/openai/openai-go/internal/encoding/json
+github.com/openai/openai-go/internal/encoding/json/sentinel
+github.com/openai/openai-go/internal/encoding/json/shims
+github.com/openai/openai-go/internal/paramutil
+github.com/openai/openai-go/internal/requestconfig
+github.com/openai/openai-go/option
+github.com/openai/openai-go/packages/pagination
+github.com/openai/openai-go/packages/param
+github.com/openai/openai-go/packages/respjson
+github.com/openai/openai-go/packages/ssestream
+github.com/openai/openai-go/responses
+github.com/openai/openai-go/shared
+github.com/openai/openai-go/shared/constant
+# github.com/pelletier/go-toml/v2 v2.2.4
+## explicit; go 1.21.0
+github.com/pelletier/go-toml/v2
+github.com/pelletier/go-toml/v2/internal/characters
+github.com/pelletier/go-toml/v2/internal/danger
+github.com/pelletier/go-toml/v2/internal/tracker
+github.com/pelletier/go-toml/v2/unstable
+# github.com/perimeterx/marshmallow v1.1.5
+## explicit; go 1.17
+github.com/perimeterx/marshmallow
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
+# github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
+## explicit
+github.com/pmezard/go-difflib/difflib
+# github.com/sirupsen/logrus v1.9.3
+## explicit; go 1.13
+github.com/sirupsen/logrus
+# github.com/slongfield/pyfmt v0.0.0-20220222012616-ea85ff4c361f
+## explicit; go 1.9
+github.com/slongfield/pyfmt
+# github.com/stretchr/testify v1.10.0
+## explicit; go 1.17
+github.com/stretchr/testify/assert
+github.com/stretchr/testify/assert/yaml
+# github.com/tidwall/gjson v1.14.4
+## explicit; go 1.12
+github.com/tidwall/gjson
+# github.com/tidwall/match v1.1.1
+## explicit; go 1.15
+github.com/tidwall/match
+# github.com/tidwall/pretty v1.2.1
+## explicit; go 1.16
+github.com/tidwall/pretty
+# github.com/tidwall/sjson v1.2.5
+## explicit; go 1.14
+github.com/tidwall/sjson
+# github.com/twitchyliquid64/golang-asm v0.15.1
+## explicit; go 1.13
+github.com/twitchyliquid64/golang-asm/asm/arch
+github.com/twitchyliquid64/golang-asm/bio
+github.com/twitchyliquid64/golang-asm/dwarf
+github.com/twitchyliquid64/golang-asm/goobj
+github.com/twitchyliquid64/golang-asm/obj
+github.com/twitchyliquid64/golang-asm/obj/arm
+github.com/twitchyliquid64/golang-asm/obj/arm64
+github.com/twitchyliquid64/golang-asm/obj/mips
+github.com/twitchyliquid64/golang-asm/obj/ppc64
+github.com/twitchyliquid64/golang-asm/obj/riscv
+github.com/twitchyliquid64/golang-asm/obj/s390x
+github.com/twitchyliquid64/golang-asm/obj/wasm
+github.com/twitchyliquid64/golang-asm/obj/x86
+github.com/twitchyliquid64/golang-asm/objabi
+github.com/twitchyliquid64/golang-asm/src
+github.com/twitchyliquid64/golang-asm/sys
+github.com/twitchyliquid64/golang-asm/unsafeheader
+# github.com/ugorji/go/codec v1.3.0
+## explicit; go 1.21
+# github.com/valyala/bytebufferpool v1.0.0
+## explicit
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v1.2.2
+## explicit; go 1.12
+github.com/valyala/fasttemplate
+# github.com/volcengine/volc-sdk-golang v1.0.196
+## explicit; go 1.14
+github.com/volcengine/volc-sdk-golang/base
+github.com/volcengine/volc-sdk-golang/service/sts
+github.com/volcengine/volc-sdk-golang/service/vikingdb
+# github.com/volcengine/volcengine-go-sdk v1.1.21
+## explicit; go 1.14
+github.com/volcengine/volcengine-go-sdk/internal/ini
+github.com/volcengine/volcengine-go-sdk/internal/sdkio
+github.com/volcengine/volcengine-go-sdk/internal/sdkmath
+github.com/volcengine/volcengine-go-sdk/internal/sdkrand
+github.com/volcengine/volcengine-go-sdk/internal/shareddefaults
+github.com/volcengine/volcengine-go-sdk/private/protocol
+github.com/volcengine/volcengine-go-sdk/private/protocol/json/jsonutil
+github.com/volcengine/volcengine-go-sdk/private/protocol/query/queryutil
+github.com/volcengine/volcengine-go-sdk/service/ark
+github.com/volcengine/volcengine-go-sdk/service/arkruntime
+github.com/volcengine/volcengine-go-sdk/service/arkruntime/model
+github.com/volcengine/volcengine-go-sdk/service/arkruntime/utils
+github.com/volcengine/volcengine-go-sdk/volcengine
+github.com/volcengine/volcengine-go-sdk/volcengine/client
+github.com/volcengine/volcengine-go-sdk/volcengine/client/metadata
+github.com/volcengine/volcengine-go-sdk/volcengine/corehandlers
+github.com/volcengine/volcengine-go-sdk/volcengine/credentials
+github.com/volcengine/volcengine-go-sdk/volcengine/credentials/endpointcreds
+github.com/volcengine/volcengine-go-sdk/volcengine/credentials/processcreds
+github.com/volcengine/volcengine-go-sdk/volcengine/custom
+github.com/volcengine/volcengine-go-sdk/volcengine/defaults
+github.com/volcengine/volcengine-go-sdk/volcengine/endpoints
+github.com/volcengine/volcengine-go-sdk/volcengine/request
+github.com/volcengine/volcengine-go-sdk/volcengine/response
+github.com/volcengine/volcengine-go-sdk/volcengine/session
+github.com/volcengine/volcengine-go-sdk/volcengine/signer/volc
+github.com/volcengine/volcengine-go-sdk/volcengine/special
+github.com/volcengine/volcengine-go-sdk/volcengine/volcenginebody
+github.com/volcengine/volcengine-go-sdk/volcengine/volcengineerr
+github.com/volcengine/volcengine-go-sdk/volcengine/volcenginequery
+github.com/volcengine/volcengine-go-sdk/volcengine/volcengineutil
+# github.com/wk8/go-ordered-map/v2 v2.1.8
+## explicit; go 1.18
+github.com/wk8/go-ordered-map/v2
+# github.com/yargevad/filepathx v1.0.0
+## explicit; go 1.14
+github.com/yargevad/filepathx
+# golang.org/x/arch v0.19.0
+## explicit; go 1.23.0
+golang.org/x/arch/x86/x86asm
+# golang.org/x/crypto v0.40.0
+## explicit; go 1.23.0
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/chacha20
+golang.org/x/crypto/curve25519
+golang.org/x/crypto/internal/alias
+golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/ssh
+golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
+# golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
+## explicit; go 1.23.0
+golang.org/x/exp/slices
+golang.org/x/exp/utf8string
+# golang.org/x/net v0.42.0
+## explicit; go 1.23.0
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/http/httpproxy
+golang.org/x/net/idna
+# golang.org/x/sync v0.16.0
+## explicit; go 1.23.0
+golang.org/x/sync/singleflight
+# golang.org/x/sys v0.34.0
+## explicit; go 1.23.0
+golang.org/x/sys/cpu
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.27.0
+## explicit; go 1.23.0
+golang.org/x/text/cases
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/internal
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/tag
+golang.org/x/text/language
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
+gopkg.in/yaml.v2
+# gopkg.in/yaml.v3 v3.0.1
+## explicit
+gopkg.in/yaml.v3
