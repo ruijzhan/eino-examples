@@ -5,8 +5,8 @@ go 1.24.0
 toolchain go1.24.4
 
 require (
-	github.com/bytedance/sonic v1.14.0
-	github.com/cloudwego/eino v0.5.0
+	github.com/bytedance/sonic v1.14.1
+	github.com/cloudwego/eino v0.5.4
 	github.com/cloudwego/eino-ext/callbacks/cozeloop v0.1.4
 	github.com/cloudwego/eino-ext/components/document/parser/html v0.0.0-20250117061805-cd80d1780d76
 	github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20250117061805-cd80d1780d76
@@ -19,7 +19,7 @@ require (
 	github.com/cloudwego/eino-ext/devops v0.1.7
 	github.com/coze-dev/cozeloop-go v0.1.11
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
-	github.com/eino-contrib/jsonschema v1.0.0
+	github.com/eino-contrib/jsonschema v1.0.1
 	github.com/ollama/ollama v0.11.4
 	github.com/stretchr/testify v1.10.0
 	github.com/volcengine/volcengine-go-sdk v1.1.21
@@ -33,9 +33,10 @@ require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bluele/gcache v0.0.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/bytedance/gopkg v0.1.3 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
-	github.com/cloudwego/base64x v0.1.5 // indirect
+	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/cloudwego/eino-ext/libs/acl/openai v0.0.0-20250826113018-8c6f6358d4bb // indirect
 	github.com/cohesion-org/deepseek-go v1.3.2 // indirect
 	github.com/corpix/uarand v0.2.0 // indirect
