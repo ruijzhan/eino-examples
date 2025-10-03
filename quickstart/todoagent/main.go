@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	clc "github.com/cloudwego/eino-ext/callbacks/cozeloop"
@@ -57,6 +58,7 @@ func main() {
 	}
 	callbacks.AppendGlobalHandlers(handlers...)
 
+	// 创建 Tool 方法3: 使用 utils.InferTool
 	updateTool, err := utils.InferTool("update_todo", "Update a todo item, eg: content,deadline...", UpdateTodoFunc)
 	if err != nil {
 		logs.Errorf("InferTool failed, err=%v", err)
@@ -77,6 +79,8 @@ func main() {
 		&ListTodoTool{},  // 使用结构体实现方式, 此处未实现底层逻辑
 		searchTool,
 	}
+
+	//--------- 配置 Model，绑定 toolsInfo list ----------------
 
 	// 创建并配置 ChatModel
 	chatModel, err := openai.NewChatModel(ctx, &openai.ChatModelConfig{
@@ -109,6 +113,8 @@ func main() {
 		return
 	}
 
+	// --------- 创建 ToolsNode -------
+
 	// 创建 tools 节点
 	todoToolsNode, err := compose.NewToolNode(ctx, &compose.ToolsNodeConfig{
 		Tools: todoTools,
@@ -134,8 +140,12 @@ func main() {
 	// 运行示例
 	resp, err := agent.Invoke(ctx, []*schema.Message{
 		{
+			Role:    schema.System,
+			Content: "You are a helpful assistant.",
+		},
+		{
 			Role:    schema.User,
-			Content: "添加一个学习 Eino 的 TODO，同时搜索一下 cloudwego/eino 的仓库地址",
+			Content: "添加一个学习 Eino 的 TODO, 要求在 2025年开始，2026年完成；同时搜索一下 cloudwego/eino 的仓库地址",
 		},
 	})
 	if err != nil {
@@ -146,53 +156,34 @@ func main() {
 	// 输出结果
 	for idx, msg := range resp {
 		logs.Infof("\n")
-		logs.Infof("message %d: %s: %s", idx, msg.Role, msg.Content)
+		logs.Infof("message %d: %s: %s\n", idx, msg.Role, msg.Content)
 	}
 }
 
-// 获取添加 todo 工具
-// 使用 utils.NewTool 创建工具
-func getAddTodoTool() tool.InvokableTool {
-	info := &schema.ToolInfo{
-		Name: "add_todo",
-		Desc: "Add a todo item",
-		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
-			"content": {
-				Desc:     "The content of the todo item",
-				Type:     schema.String,
-				Required: true,
-			},
-			"started_at": {
-				Desc: "The started time of the todo item, in unix timestamp",
-				Type: schema.Integer,
-			},
-			"deadline": {
-				Desc: "The deadline of the todo item, in unix timestamp",
-				Type: schema.Integer,
-			},
-		}),
+func UpdateTodoFunc(_ context.Context, params *TodoUpdateParams) (string, error) {
+	content := "<not set>"
+	if params.Content != nil {
+		content = fmt.Sprintf("%q", *params.Content)
+	}
+	startedAt := "<not set>"
+	if params.StartedAt != nil {
+		startedAt = fmt.Sprintf("%d", *params.StartedAt)
+	}
+	deadline := "<not set>"
+	if params.Deadline != nil {
+		deadline = fmt.Sprintf("%d", *params.Deadline)
+	}
+	done := "<not set>"
+	if params.Done != nil {
+		done = fmt.Sprintf("%t", *params.Done)
 	}
 
-	return utils.NewTool(info, AddTodoFunc)
-}
+	logs.Infof("invoke tool update_todo: id=%q, content=%s, started_at=%s, deadline=%s, done=%s", params.ID, content, startedAt, deadline, done)
 
-// ListTodoTool
-// 获取列出 todo 工具
-// 自行实现 InvokableTool 接口
-type ListTodoTool struct{}
+	// Tool处理代码
+	// ...
 
-func (lt *ListTodoTool) Info(_ context.Context) (*schema.ToolInfo, error) {
-	return &schema.ToolInfo{
-		Name: "list_todo",
-		Desc: "List all todo items",
-		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
-			"finished": {
-				Desc:     "filter todo items if finished",
-				Type:     schema.Boolean,
-				Required: false,
-			},
-		}),
-	}, nil
+	return `{"msg": "update todo success"}`, nil
 }
 
 type TodoUpdateParams struct {
@@ -209,6 +200,70 @@ type TodoAddParams struct {
 	Deadline *int64 `json:"deadline,omitempty"`
 }
 
+// 获取添加 todo 工具
+// 创建 Tool 方式1: 使用 utils.NewTool 创建工具，接收 ToolInfo 和 InvokeFunc 两个参数
+func getAddTodoTool() tool.InvokableTool {
+	return utils.NewTool(
+		// ToolInfo
+		&schema.ToolInfo{
+			Name: "add_todo",
+			Desc: "Add a todo item",
+			ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
+				"content": {
+					Desc:     "The content of the todo item",
+					Type:     schema.String,
+					Required: true,
+				},
+				"started_at": {
+					Desc: "The started time of the todo item, in unix timestamp",
+					Type: schema.Integer,
+				},
+				"deadline": {
+					Desc: "The deadline of the todo item, in unix timestamp",
+					Type: schema.Integer,
+				},
+			}),
+		},
+		// InvokeFunc
+		func(ctx context.Context, params *TodoAddParams) (string, error) {
+			startAt := "<not set>"
+			if params.StartAt != nil {
+				startAt = fmt.Sprintf("%d", *params.StartAt)
+			}
+			deadline := "<not set>"
+			if params.Deadline != nil {
+				deadline = fmt.Sprintf("%d", *params.Deadline)
+			}
+
+			logs.Infof("invoke tool add_todo: content=%q, started_at=%s, deadline=%s", params.Content, startAt, deadline)
+
+			// Tool处理代码
+			// ...
+
+			return `{"msg": "add todo success"}`, nil
+		},
+	)
+}
+
+// ListTodoTool
+// 获取列出 todo 工具
+// 创建 Tool 方式2: 自行实现 InvokableTool 接口, 包括 Info 和 InvokableRun
+type ListTodoTool struct{}
+
+func (lt *ListTodoTool) Info(_ context.Context) (*schema.ToolInfo, error) {
+	return &schema.ToolInfo{
+		Name: "list_todo",
+		Desc: "List all todo items",
+		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
+			"finished": {
+				Desc:     "filter todo items if finished",
+				Type:     schema.Boolean,
+				Required: false,
+			},
+		}),
+	}, nil
+}
+
 func (lt *ListTodoTool) InvokableRun(_ context.Context, argumentsInJSON string, _ ...tool.Option) (string, error) {
 	logs.Infof("invoke tool list_todo: %s", argumentsInJSON)
 
@@ -216,22 +271,4 @@ func (lt *ListTodoTool) InvokableRun(_ context.Context, argumentsInJSON string, 
 	// ...
 
 	return `{"todos": [{"id": "1", "content": "在2024年12月10日之前完成Eino项目演示文稿的准备工作", "started_at": 1717401600, "deadline": 1717488000, "done": false}]}`, nil
-}
-
-func AddTodoFunc(_ context.Context, params *TodoAddParams) (string, error) {
-	logs.Infof("invoke tool add_todo: %+v", params)
-
-	// Tool处理代码
-	// ...
-
-	return `{"msg": "add todo success"}`, nil
-}
-
-func UpdateTodoFunc(_ context.Context, params *TodoUpdateParams) (string, error) {
-	logs.Infof("invoke tool update_todo: %+v", params)
-
-	// Tool处理代码
-	// ...
-
-	return `{"msg": "update todo success"}`, nil
 }
