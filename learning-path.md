@@ -134,7 +134,7 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `components/prompt/chat_prompt/chat_prompt.go`
 
 ### 6. components/lambda/ - 自定义函数组件
-- [ ] 已完成该模块
+- [x] 已完成该模块
 **学习目标**：学习在 Eino 中编排自定义函数
 
 **前置知识**：`components/tool`
