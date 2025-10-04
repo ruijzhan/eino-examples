@@ -34,7 +34,7 @@ func main() {
 	// 初始化模型
 	model, err := openai.NewChatModel(ctx, &openai.ChatModelConfig{
 		APIKey:  os.Getenv("OPENAI_API_KEY"),
-		Model:   os.Getenv("OPENAI_MODEL"),
+		Model:   os.Getenv("OPENAI_MODEL_NAME"),
 		BaseURL: os.Getenv("OPENAI_BASE_URL"),
 		ByAzure: func() bool {
 			return os.Getenv("OPENAI_BY_AZURE") == "true"

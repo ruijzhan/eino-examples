@@ -91,7 +91,7 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `components/tool/callback/main.go`
 
 ### 4. adk/helloworld/ - ADK 框架入门
-- [ ] 已完成该模块
+- [x] 已完成该模块
 **学习目标**：学习 Agent 开发套件的基础用法
 
 **前置知识**：`components/tool`
@@ -104,7 +104,13 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - 简单的交互模式
 
 **关键文件**：
-- `adk/helloworld/helloworld.go`
+- `adk/helloworld/helloworld.go` - 主程序入口
+- `adk/helloworld/README.md` - 完整的 ADK 概述和架构说明
+- `adk/helloworld/ChatModelAgentConfig.md` - Agent 配置结构详解
+- `adk/helloworld/NewChatModelAgent.md` - Agent 构造函数说明
+- `adk/helloworld/RunnerConfig.md` - Runner 配置结构详解
+- `adk/helloworld/NewRunner.md` - Runner 构造函数说明
+- `adk/helloworld/Run.md` - Runner 执行方法详解（包含 Query 方法对比）
 
 ---
 
