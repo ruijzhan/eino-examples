@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lambda
+package main
 
 import (
 	"context"

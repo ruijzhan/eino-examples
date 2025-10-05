@@ -34,18 +34,27 @@ import (
     "fmt"
     "strings"
 
-    "github.com/cloudwego/eino/components/compose"
+    "github.com/cloudwego/eino/compose"
 )
 
 func main() {
     // 创建一个简单的文本处理 Lambda
-    lambda := compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
+    chain := compose.NewChain[string, string]()
+
+    // 添加 Lambda 到链中
+    chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
         // 转换为大写并添加前缀
         return "处理结果: " + strings.ToUpper(input), nil
-    })
+    }))
 
-    // 使用 Lambda
-    result, err := lambda.Invoke(context.Background(), "hello lambda")
+    // 编译 Chain
+    runner, err := chain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    // 使用 Chain (包含我们的 Lambda)
+    result, err := runner.Invoke(context.Background(), "hello lambda")
     if err != nil {
         panic(err)
     }
@@ -120,24 +129,49 @@ func(ctx context.Context, input I, opts ...TOption) (output *schema.StreamReader
 // 文本分词流式输出
 wordStreamer := compose.StreamableLambda(func(ctx context.Context, text string) (*schema.StreamReader[string], error) {
     words := strings.Split(text, " ")
-    reader := schema.NewStreamReader[string]()
+    sr, sw := schema.Pipe[string](len(words))
 
     go func() {
-        defer reader.Close()
+        defer sw.Close()
         for _, word := range words {
-            reader.Send(ctx, word)
+            if ctx.Err() != nil {
+                return
+            }
+            sw.Send(word, nil)
             time.Sleep(100 * time.Millisecond) // 模拟处理延迟
         }
     }()
 
-    return reader.Recv(), nil
+    return sr, nil
 })
 
-// 数据库查询结果流式返回
-dataStreamer := compose.StreamableLambda(func(ctx context.Context, query string) (*schema.StreamReader[Record], error) {
-    // 模拟数据库查询
-    return streamQueryResults(ctx, query), nil
-})
+// 创建流式处理链
+streamChain := compose.NewChain[string, string]()
+streamChain.AppendLambda(wordStreamer)
+
+streamRunner, err := streamChain.Compile(context.Background())
+if err != nil {
+    panic(err)
+}
+
+// 使用流式处理
+stream, err := streamRunner.Stream(context.Background(), "Go 语言 是 一个 有趣 的 案例")
+if err != nil {
+    panic(err)
+}
+defer stream.Close()
+
+// 读取流式结果
+for {
+    chunk, chunkErr := stream.Recv()
+    if errors.Is(chunkErr, io.EOF) {
+        break
+    }
+    if chunkErr != nil {
+        panic(chunkErr)
+    }
+    fmt.Printf("stream chunk: %s\n", chunk)
+}
 ```
 
 ### 3. Collect 模式 ⭐⭐
@@ -171,21 +205,30 @@ sumCollector := compose.CollectableLambda(func(ctx context.Context, numbers *sch
     return sum, nil
 })
 
-// 文本片段合并
-textMerger := compose.CollectableLambda(func(ctx context.Context, fragments *schema.StreamReader[string]) (string, error) {
-    var builder strings.Builder
-    for {
-        fragment, err := fragments.Recv()
-        if err != nil {
-            if errors.Is(err, io.EOF) {
-                break
-            }
-            return "", err
-        }
-        builder.WriteString(fragment)
+// 创建测试数据流
+sr, sw := schema.Pipe[int](5)
+go func() {
+    defer sw.Close()
+    for i := 1; i <= 5; i++ {
+        sw.Send(i, nil)
     }
-    return builder.String(), nil
-})
+}()
+
+// 使用收集器
+collectChain := compose.NewChain[int, int]()
+collectChain.AppendLambda(sumCollector)
+
+collectRunner, err := collectChain.Compile(context.Background())
+if err != nil {
+    panic(err)
+}
+
+result, err := collectRunner.Collect(context.Background(), sr)
+if err != nil {
+    panic(err)
+}
+
+fmt.Printf("数字流求和结果: %d (1+2+3+4+5 = 15)\n", result)
 ```
 
 ### 4. Transform 模式 ⭐⭐⭐
@@ -205,10 +248,10 @@ func(ctx context.Context, input *schema.StreamReader[I], opts ...TOption) (outpu
 ```go
 // 过滤偶数
 evenFilter := compose.TransformableLambda(func(ctx context.Context, numbers *schema.StreamReader[int]) (*schema.StreamReader[int], error) {
-    output := schema.NewStreamReader[int]()
+    sr, sw := schema.Pipe[int](0) // 动态管道，容量未知
 
     go func() {
-        defer output.Close()
+        defer sw.Close()
         for {
             num, err := numbers.Recv()
             if err != nil {
@@ -218,36 +261,52 @@ evenFilter := compose.TransformableLambda(func(ctx context.Context, numbers *sch
                 return
             }
             if num%2 == 0 {
-                output.Send(ctx, num)
+                sw.Send(num, nil)
             }
         }
     }()
 
-    return output.Recv(), nil
+    return sr, nil
 })
 
-// 实时翻译
-translator := compose.TransformableLambda(func(ctx context.Context, texts *schema.StreamReader[string]) (*schema.StreamReader[string], error) {
-    output := schema.NewStreamReader[string]()
+// 创建测试数据流 (1-10)
+inputSr, inputSw := schema.Pipe[int](10)
+go func() {
+    defer inputSw.Close()
+    for i := 1; i <= 10; i++ {
+        inputSw.Send(i, nil)
+    }
+}()
 
-    go func() {
-        defer output.Close()
-        for {
-            text, err := texts.Recv()
-            if err != nil {
-                if errors.Is(err, io.EOF) {
-                    break
-                }
-                return
-            }
-            // 调用翻译API
-            translated, _ := translateText(ctx, text, "en", "zh")
-            output.Send(ctx, translated)
+// 使用转换器
+transformChain := compose.NewChain[int, int]()
+transformChain.AppendLambda(evenFilter)
+
+transformRunner, err := transformChain.Compile(context.Background())
+if err != nil {
+    panic(err)
+}
+
+outputSr, err := transformRunner.Transform(context.Background(), inputSr)
+if err != nil {
+    panic(err)
+}
+defer outputSr.Close()
+
+fmt.Println("过滤偶数结果:")
+var evenNumbers []int
+for {
+    num, err := outputSr.Recv()
+    if err != nil {
+        if errors.Is(err, io.EOF) {
+            break
         }
-    }()
-
-    return output.Recv(), nil
-})
+        panic(err)
+    }
+    evenNumbers = append(evenNumbers, num)
+    fmt.Printf("even number: %d\n", num)
+}
+fmt.Printf("偶数列表: %v\n", evenNumbers)
 ```
 
 ---
@@ -265,40 +324,74 @@ translator := compose.TransformableLambda(func(ctx context.Context, texts *schem
 ### 练习1：简单的数据处理 Lambda
 
 ```go
-// 任务：创建一个Lambda，将字符串转换为JSON格式
+package main
+
+import (
+    "context"
+    "fmt"
+    "strconv"
+    "strings"
+
+    "github.com/cloudwego/eino/compose"
+)
+
 type Person struct {
     Name  string `json:"name"`
     Age   int    `json:"age"`
     Email string `json:"email"`
 }
 
-stringToPerson := compose.InvokableLambda(func(ctx context.Context, input string) (*Person, error) {
-    parts := strings.Split(input, ",")
-    if len(parts) != 3 {
-        return nil, fmt.Errorf("输入格式错误，应为：姓名,年龄,邮箱")
-    }
+func main() {
+    // 任务：创建一个Lambda，将字符串转换为JSON格式
+    stringToPerson := compose.InvokableLambda(func(ctx context.Context, input string) (*Person, error) {
+        parts := strings.Split(input, ",")
+        if len(parts) != 3 {
+            return nil, fmt.Errorf("输入格式错误，应为：姓名,年龄,邮箱")
+        }
 
-    age, err := strconv.Atoi(strings.TrimSpace(parts[1]))
+        age, err := strconv.Atoi(strings.TrimSpace(parts[1]))
+        if err != nil {
+            return nil, fmt.Errorf("年龄转换失败: %v", err)
+        }
+
+        return &Person{
+            Name:  strings.TrimSpace(parts[0]),
+            Age:   age,
+            Email: strings.TrimSpace(parts[2]),
+        }, nil
+    })
+
+    // 使用示例
+    chain := compose.NewChain[string, *Person]()
+    chain.AppendLambda(stringToPerson)
+
+    runner, err := chain.Compile(context.Background())
     if err != nil {
-        return nil, fmt.Errorf("年龄转换失败: %v", err)
+        panic(err)
     }
 
-    return &Person{
-        Name:  strings.TrimSpace(parts[0]),
-        Age:   age,
-        Email: strings.TrimSpace(parts[2]),
-    }, nil
-})
+    person, err := runner.Invoke(context.Background(), "张三,25,zhangsan@example.com")
+    if err != nil {
+        panic(err)
+    }
 
-// 使用示例
-person, _ := stringToPerson.Invoke(ctx, "张三,25,zhangsan@example.com")
-fmt.Printf("%+v\n", person)
+    fmt.Printf("%+v\n", person)
+}
 ```
 
 ### 练习2：带自定义选项的 Lambda
 
 ```go
-// 任务：创建一个可配置的文本格式化 Lambda
+package main
+
+import (
+    "context"
+    "fmt"
+    "strings"
+
+    "github.com/cloudwego/eino/compose"
+)
+
 type FormatOptions struct {
     Prefix string
     Suffix string
@@ -325,80 +418,181 @@ func WithUpper() FormatOption {
     }
 }
 
-formatter := compose.InvokableLambdaWithOption(
-    func(ctx context.Context, input string, formatOpts ...FormatOption) (string, error) {
-        opts := &FormatOptions{
-            Prefix: "",
-            Suffix: "",
-            Upper:  false,
-        }
+func main() {
+    // 任务：创建一个可配置的文本格式化 Lambda
+    formatter := compose.InvokableLambdaWithOption(
+        func(ctx context.Context, input string, formatOpts ...FormatOption) (string, error) {
+            opts := &FormatOptions{
+                Prefix: "",
+                Suffix: "",
+                Upper:  false,
+            }
 
-        for _, opt := range formatOpts {
-            opt(opts)
-        }
+            for _, opt := range formatOpts {
+                opt(opts)
+            }
 
-        result := input
-        if opts.Upper {
-            result = strings.ToUpper(result)
-        }
+            result := input
+            if opts.Upper {
+                result = strings.ToUpper(result)
+            }
 
-        return opts.Prefix + result + opts.Suffix, nil
-    },
-)
+            return opts.Prefix + result + opts.Suffix, nil
+        },
+    )
 
-// 使用示例
-result1, _ := formatter.Invoke(ctx, "hello", WithPrefix(">>> "), WithSuffix(" <<<"))
-fmt.Println(result1) // >>> hello <<<
+    // 使用示例1
+    chain1 := compose.NewChain[string, string]()
+    chain1.AppendLambda(formatter)
+    runner1, err := chain1.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
 
-result2, _ := formatter.Invoke(ctx, "world", WithUpper(), WithPrefix("[INFO] "))
-fmt.Println(result2) // [INFO] WORLD
+    result1, err := runner1.Invoke(context.Background(), "hello", WithPrefix(">>> "), WithSuffix(" <<<"))
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(result1) // >>> hello <<<
+
+    // 使用示例2
+    chain2 := compose.NewChain[string, string]()
+    chain2.AppendLambda(formatter)
+    runner2, err := chain2.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    result2, err := runner2.Invoke(context.Background(), "world", WithUpper(), WithPrefix("[INFO] "))
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(result2) // [INFO] WORLD
+}
 ```
 
 ### 练习3：多模式组合 Lambda
 
 ```go
-// 任务：创建一个既支持同步又支持异步的文本处理 Lambda
-textProcessor, err := compose.AnyLambda(
-    // Invoke 模式：一次性处理
-    func(ctx context.Context, input string, opts ...processOption) (string, error) {
-        return processText(input), nil
-    },
-    // Stream 模式：逐词处理
-    func(ctx context.Context, input string, opts ...processOption) (*schema.StreamReader[string], error) {
-        words := strings.Split(input, " ")
-        reader := schema.NewStreamReader[string]()
+package main
 
-        go func() {
-            defer reader.Close()
-            for _, word := range words {
-                processed := processText(word)
-                reader.Send(ctx, processed)
-                time.Sleep(50 * time.Millisecond)
-            }
-        }()
+import (
+    "context"
+    "errors"
+    "fmt"
+    "io"
+    "strings"
+    "time"
 
-        return reader.Recv(), nil
-    },
-    // Collect 模式：合并多个文本
-    func(ctx context.Context, texts *schema.StreamReader[string], opts ...processOption) (string, error) {
-        var result strings.Builder
-        for {
-            text, err := texts.Recv()
-            if err != nil {
-                if errors.Is(err, io.EOF) {
-                    break
-                }
-                return "", err
-            }
-            processed := processText(text)
-            builder.WriteString(processed + " ")
-        }
-        return strings.TrimSpace(result.String()), nil
-    },
+    "github.com/cloudwego/eino/compose"
+    "github.com/cloudwego/eino/schema"
 )
 
+// 自定义选项类型（如果需要）
+type ProcessOption func(*ProcessConfig)
+
+type ProcessConfig struct {
+    Uppercase bool
+    TrimSpace bool
+}
+
+func WithUppercase() ProcessOption {
+    return func(cfg *ProcessConfig) {
+        cfg.Uppercase = true
+    }
+}
+
+func WithTrimSpace() ProcessOption {
+    return func(cfg *ProcessConfig) {
+        cfg.TrimSpace = true
+    }
+}
+
 func processText(text string) string {
+    // 简单的文本处理函数
     return strings.ToUpper(strings.TrimSpace(text))
+}
+
+func main() {
+    // 任务：创建一个既支持同步又支持异步的文本处理 Lambda
+    textProcessor, err := compose.AnyLambda(
+        // Invoke 模式：一次性处理
+        func(ctx context.Context, input string, opts ...ProcessOption) (string, error) {
+            return processText(input), nil
+        },
+        // Stream 模式：逐词处理
+        func(ctx context.Context, input string, opts ...ProcessOption) (*schema.StreamReader[string], error) {
+            words := strings.Split(input, " ")
+            sr, sw := schema.Pipe[string](len(words))
+
+            go func() {
+                defer sw.Close()
+                for _, word := range words {
+                    processed := processText(word)
+                    sw.Send(processed, nil)
+                    time.Sleep(50 * time.Millisecond)
+                }
+            }()
+
+            return sr, nil
+        },
+        // Collect 模式：合并多个文本
+        func(ctx context.Context, texts *schema.StreamReader[string], opts ...ProcessOption) (string, error) {
+            var result strings.Builder
+            for {
+                text, err := texts.Recv()
+                if err != nil {
+                    if errors.Is(err, io.EOF) {
+                        break
+                    }
+                    return "", err
+                }
+                processed := processText(text)
+                result.WriteString(processed + " ")
+            }
+            return strings.TrimSpace(result.String()), nil
+        },
+        // Transform 模式：流式转换
+        func(ctx context.Context, texts *schema.StreamReader[string], opts ...ProcessOption) (*schema.StreamReader[string], error) {
+            sr, sw := schema.Pipe[string](0)
+
+            go func() {
+                defer sw.Close()
+                for {
+                    text, err := texts.Recv()
+                    if err != nil {
+                        if errors.Is(err, io.EOF) {
+                            break
+                        }
+                        return
+                    }
+                    processed := processText(text)
+                    sw.Send(processed, nil)
+                }
+            }()
+
+            return sr, nil
+        },
+    )
+
+    if err != nil {
+        panic(err)
+    }
+
+    // 使用 Invoke 模式
+    invokeChain := compose.NewChain[string, string]()
+    invokeChain.AppendLambda(textProcessor)
+
+    invokeRunner, err := invokeChain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    result, err := invokeRunner.Invoke(context.Background(), "hello world test")
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("Invoke 结果: %s\n", result)
 }
 ```
 
@@ -409,53 +603,131 @@ func processText(text string) string {
 ### 在 Chain 中使用
 
 ```go
-// 构建一个文本处理流水线
-chain := compose.NewChain[string, string]()
+package main
 
-// 1. 文本清洗
-chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
-    return strings.TrimSpace(input), nil
-}))
+import (
+    "context"
+    "fmt"
+    "strings"
+    "unicode"
 
-// 2. 语言检测
-chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
-    if containsChinese(input) {
-        return "zh-CN", nil
+    "github.com/cloudwego/eino/compose"
+)
+
+// 简单的中文检测函数
+func containsChinese(s string) bool {
+    for _, r := range s {
+        if unicode.Is(unicode.Han, r) {
+            return true
+        }
     }
-    return "en-US", nil
-}))
+    return false
+}
 
-// 3. 格式化输出
-chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, lang string) (string, error) {
-    return fmt.Sprintf("检测到语言: %s", lang), nil
-}))
+func main() {
+    // 构建一个文本处理流水线
+    chain := compose.NewChain[string, string]()
 
-// 编译并运行
-runner, _ := chain.Compile(ctx)
-result, _ := runner.Invoke(ctx, "  你好世界  ")
-fmt.Println(result) // 检测到语言: zh-CN
+    // 1. 文本清洗
+    chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
+        return strings.TrimSpace(input), nil
+    }))
+
+    // 2. 语言检测
+    chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
+        if containsChinese(input) {
+            return "zh-CN", nil
+        }
+        return "en-US", nil
+    }))
+
+    // 3. 格式化输出
+    chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, lang string) (string, error) {
+        return fmt.Sprintf("检测到语言: %s", lang), nil
+    }))
+
+    // 编译并运行
+    runner, err := chain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    result, err := runner.Invoke(context.Background(), "  你好世界  ")
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(result) // 检测到语言: zh-CN
+}
 ```
 
 ### 在 Graph 中使用
 
 ```go
-// 构建一个复杂的数据处理图
-graph := compose.NewGraph[string, ProcessedData]()
+package main
 
-// 添加节点
-graph.AddLambdaNode("parse_input", parseInputLambda)      // 解析输入
-graph.AddLambdaNode("validate_data", validateDataLambda) // 验证数据
-graph.AddLambdaNode("process_data", processDataLambda)   // 处理数据
-graph.AddLambdaNode("format_output", formatOutputLambda) // 格式化输出
+import (
+    "context"
+    "fmt"
 
-// 添加边（连接节点）
-graph.AddEdge("parse_input", "validate_data")
-graph.AddEdge("validate_data", "process_data")
-graph.AddEdge("process_data", "format_output")
+    "github.com/cloudwego/eino/compose"
+)
 
-// 编译并运行
-runner, _ := graph.Compile(ctx)
-result, _ := runner.Invoke(ctx, "input data")
+type ProcessedData struct {
+    Original  string
+    Validated bool
+    Processed string
+    Formatted string
+}
+
+func main() {
+    // 构建一个复杂的数据处理图
+    graph := compose.NewGraph[string, ProcessedData]()
+
+    // 添加节点
+    parseInputLambda := compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
+        return fmt.Sprintf("PARSED: %s", input), nil
+    })
+
+    validateDataLambda := compose.InvokableLambda(func(ctx context.Context, input string) (bool, error) {
+        return len(input) > 0, nil
+    })
+
+    processDataLambda := compose.InvokableLambda(func(ctx context.Context, input string) (string, error) {
+        return fmt.Sprintf("PROCESSED: %s", input), nil
+    })
+
+    formatOutputLambda := compose.InvokableLambda(func(ctx context.Context, input string) (ProcessedData, error) {
+        return ProcessedData{
+            Original:  input,
+            Validated: true,
+            Processed: input,
+            Formatted: fmt.Sprintf("FINAL: %s", input),
+        }, nil
+    })
+
+    graph.AddLambdaNode("parse_input", parseInputLambda)      // 解析输入
+    graph.AddLambdaNode("validate_data", validateDataLambda) // 验证数据
+    graph.AddLambdaNode("process_data", processDataLambda)   // 处理数据
+    graph.AddLambdaNode("format_output", formatOutputLambda) // 格式化输出
+
+    // 添加边（连接节点）
+    graph.AddEdge("parse_input", "validate_data")
+    graph.AddEdge("validate_data", "process_data")
+    graph.AddEdge("process_data", "format_output")
+
+    // 编译并运行
+    runner, err := graph.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    result, err := runner.Invoke(context.Background(), "input data")
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("Graph 结果: %+v\n", result)
+}
 ```
 
 ### 内置 Lambda 组件
@@ -463,21 +735,79 @@ result, _ := runner.Invoke(ctx, "input data")
 #### ToList Lambda - 类型转换神器
 
 ```go
-// 将单个消息转换为消息列表
-msgToList := compose.ToList[*schema.Message]()
+package main
 
-// 在Chain中的常见用法
-chain := compose.NewChain[string, []*schema.Message]()
-chain.AppendChatModel(chatModel)  // 返回 *schema.Message
-chain.AppendLambda(msgToList)     // 转换为 []*schema.Message
-chain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, messages []*schema.Message) (int, error) {
-    return len(messages), nil
-}))
+import (
+    "context"
+    "fmt"
+
+    "github.com/cloudwego/eino/compose"
+    "github.com/cloudwego/eino/schema"
+)
+
+func main() {
+    // 将单个消息转换为消息列表
+    msgToList := compose.ToList[*schema.Message]()
+
+    // 在Chain中的常见用法 - 简化版本
+    chain := compose.NewChain[*schema.Message, []*schema.Message]()
+    chain.AppendLambda(msgToList) // 转换为 []*schema.Message
+
+    // 编译并运行
+    runner, err := chain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    // 创建测试消息
+    message := &schema.Message{
+        Role:    schema.User,
+        Content: "Hello, this is a test message",
+    }
+
+    // 执行转换
+    messageList, err := runner.Invoke(context.Background(), message)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("消息列表长度: %d\n", len(messageList))
+    fmt.Printf("第一条消息内容: %s\n", messageList[0].Content)
+
+    // 在另一个Chain中使用消息列表
+    countingChain := compose.NewChain[*schema.Message, int]()
+    countingChain.AppendLambda(msgToList) // 转换为列表
+    countingChain.AppendLambda(compose.InvokableLambda(func(ctx context.Context, messages []*schema.Message) (int, error) {
+        return len(messages), nil
+    }))
+
+    countingRunner, err := countingChain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    count, err := countingRunner.Invoke(context.Background(), message)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("消息数量: %d\n", count)
+}
 ```
 
 #### MessageParser Lambda - JSON解析利器
 
 ```go
+package main
+
+import (
+    "context"
+    "fmt"
+
+    "github.com/cloudwego/eino/compose"
+    "github.com/cloudwego/eino/schema"
+)
+
 // 定义要解析的结构体
 type WeatherInfo struct {
     City        string  `json:"city"`
@@ -486,25 +816,40 @@ type WeatherInfo struct {
     Description string  `json:"description"`
 }
 
-// 创建解析器
-weatherParser := schema.NewMessageJSONParser[*WeatherInfo](&schema.MessageJSONParseConfig{
-    ParseFrom:    schema.MessageParseFromContent,
-    ParseKeyPath: "", // 如果只需要解析子字段，可以用 "weather.data"
-})
+func main() {
+    // 创建解析器
+    weatherParser := schema.NewMessageJSONParser[*WeatherInfo](&schema.MessageJSONParseConfig{
+        ParseFrom:    schema.MessageParseFromContent,
+        ParseKeyPath: "", // 如果只需要解析子字段，可以用 "weather.data"
+    })
 
-// 创建解析 Lambda
-parseWeatherLambda := compose.MessageParser(weatherParser)
+    // 创建解析 Lambda
+    parseWeatherLambda := compose.MessageParser(weatherParser)
 
-// 使用示例
-chain := compose.NewChain[*schema.Message, *WeatherInfo]()
-chain.AppendLambda(parseWeatherLambda)
+    // 使用示例
+    chain := compose.NewChain[*schema.Message, *WeatherInfo]()
+    chain.AppendLambda(parseWeatherLambda)
 
-// 运行
-runner, _ := chain.Compile(ctx)
-weather, _ := runner.Invoke(ctx, &schema.Message{
-    Content: `{"city": "北京", "temperature": 25.5, "humidity": 60, "description": "晴天"}`,
-})
-fmt.Printf("城市: %s, 温度: %.1f°C\n", weather.City, weather.Temperature)
+    // 编译并运行
+    runner, err := chain.Compile(context.Background())
+    if err != nil {
+        panic(err)
+    }
+
+    // 创建包含JSON内容的消息
+    message := &schema.Message{
+        Role:    schema.User,
+        Content: `{"city": "北京", "temperature": 25.5, "humidity": 60, "description": "晴天"}`,
+    }
+
+    weather, err := runner.Invoke(context.Background(), message)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Printf("城市: %s, 温度: %.1f°C\n", weather.City, weather.Temperature)
+    fmt.Printf("湿度: %d%%, 天气: %s\n", weather.Humidity, weather.Description)
+}
 ```
 
 ---
@@ -540,11 +885,11 @@ goodLambda := compose.InvokableLambda(func(ctx context.Context, items []string) 
 ```go
 // 并发处理多个任务
 concurrentProcessor := compose.StreamableLambda(func(ctx context.Context, tasks []Task) (*schema.StreamReader[Result], error) {
-    output := schema.NewStreamReader[Result]()
+    sr, sw := schema.Pipe[Result](len(tasks))
     sem := make(chan struct{}, 10) // 限制并发数
 
     go func() {
-        defer output.Close()
+        defer sw.Close()
         var wg sync.WaitGroup
 
         for _, task := range tasks {
@@ -555,14 +900,14 @@ concurrentProcessor := compose.StreamableLambda(func(ctx context.Context, tasks 
                 defer func() { <-sem }() // 释放信号量
 
                 result := processTask(ctx, t)
-                output.Send(ctx, result)
+                sw.Send(result, nil)
             }(task)
         }
 
         wg.Wait()
     }()
 
-    return output.Recv(), nil
+    return sr, nil
 })
 ```
 
