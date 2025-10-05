@@ -16,12 +16,50 @@
 
 ## 📚 总览
 
-Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习：
+Eino Examples 项目按学习难度分为五个等级，建议按此顺序学习：
 
+- **📖 预备阶段**：环境准备和基础概念
 - **🌱 入门级**：基础概念和简单使用
 - **🔧 中级**：组件深入和功能扩展
 - **🏗️ 高级**：编排和工作流
 - **🚀 专家级**：复杂系统架构
+
+### 🎯 学习设计原则
+- **循序渐进**：每个阶段都有明确的前置知识要求
+- **理论结合实践**：概念讲解 + 代码实践 + 项目应用
+- **及时反馈**：每个模块都有学习检查点和验证方式
+- **实战导向**：最终目标是能够独立构建AI应用
+
+---
+
+## 📖 预备阶段 - 环境准备和基础概念
+
+### 0. 环境准备和基础概念
+- [ ] 必须完成该阶段
+**学习目标**：搭建开发环境，理解Eino框架核心概念
+
+**前置知识**：Go语言基础语法、基本AI概念
+
+**难度**：⭐
+
+**核心内容**：
+- Eino框架核心架构和设计理念
+- AI编排基础概念
+- 开发环境搭建
+- API密钥配置和基础服务准备
+
+**关键资源**：
+- `README.md` - 项目总体介绍
+- `CLAUDE.md` - 开发指南和架构说明
+- `.env` - 环境配置示例
+- [Eino官方文档](https://github.com/cloudwego/eino)
+
+**学习检查点**：
+- [ ] 成功搭建开发环境
+- [ ] 理解Eino的核心组件概念
+- [ ] 能够运行一个最简单的示例
+
+**预计时间**：1-2天
 
 ---
 
@@ -79,16 +117,23 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 
 **前置知识**：`quickstart/todoagent`
 
-**难度**：⭐⭐
+**难度**：⭐⭐⭐
 
 **核心内容**：
 - 工具定义和注册
 - 参数验证和转换
 - 错误处理机制
+- JSON Schema 工具定义
+- 回调机制使用
 
 **关键文件**：
 - `components/tool/jsonschema/main.go`
 - `components/tool/callback/main.go`
+
+**学习检查点**：
+- [ ] 能够定义和注册自定义工具
+- [ ] 理解工具调用的完整流程
+- [ ] 掌握参数验证和错误处理
 
 ### 4. adk/helloworld/ - ADK 框架入门
 - [x] 已完成该模块
@@ -96,12 +141,13 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 
 **前置知识**：`components/tool`
 
-**难度**：⭐⭐
+**难度**：⭐⭐⭐
 
 **核心内容**：
 - ADK 框架基本概念
 - Agent 创建和配置
 - 简单的交互模式
+- Agent Runner 理解和使用
 
 **关键文件**：
 - `adk/helloworld/helloworld.go` - 主程序入口
@@ -111,6 +157,12 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `adk/helloworld/RunnerConfig.md` - Runner 配置结构详解
 - `adk/helloworld/NewRunner.md` - Runner 构造函数说明
 - `adk/helloworld/Run.md` - Runner 执行方法详解（包含 Query 方法对比）
+
+**学习检查点**：
+- [ ] 理解ADK框架的核心概念
+- [ ] 能够创建和配置简单Agent
+- [ ] 掌握Agent和Runner的关系
+- [ ] 能够独立运行ADK示例
 
 ---
 
@@ -150,31 +202,61 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 **关键文件**：
 - `components/lambda/lambda.go`
 
-### 7. quickstart/eino_assistant/ - 增强型助手
+### 7. components/document/ - 文档处理基础
+- [ ] 已完成该模块
+**学习目标**：学习各种文件格式解析和处理
+
+**前置知识**：`quickstart/chat`
+
+**难度**：⭐⭐⭐
+
+**核心内容**：
+- 多格式解析器（PDF、HTML、文本）
+- 文档加载器
+- 内容提取和转换
+- 文档分块策略
+
+**关键文件**：
+- `components/document/parser/extparser/` - 扩展格式解析器
+- `components/document/parser/textparser/` - 文本解析器
+- `components/document/parser/customparser/` - 自定义解析器
+
+**学习检查点**：
+- [ ] 能够解析和处理多种文档格式
+- [ ] 理解文档分块策略
+- [ ] 掌握内容提取和转换技术
+
+### 8. quickstart/eino_assistant/ - 增强型助手
 - [ ] 已完成该模块
 **学习目标**：构建更复杂的助手应用
 
-**前置知识**：`components/prompt`, `components/tool`
+**前置知识**：`components/prompt`, `components/tool`, `components/document`
 
-**难度**：⭐⭐⭐
+**难度**：⭐⭐⭐⭐
 
 **核心内容**：
 - 多模态助手
 - 知识库集成
 - 工具链管理
 - 用户会话管理
+- 文档处理集成
 
 **关键文件**：
 - `quickstart/eino_assistant/cmd/einoagent/main.go`
 - `quickstart/eino_assistant/eino/einoagent/flow.go`
 
-### 8. adk/intro/chatmodel/ - ChatModel Agent 进阶
+**学习检查点**：
+- [ ] 能够集成多个组件构建复杂助手
+- [ ] 掌握会话管理机制
+- [ ] 理解多工具协同的架构设计
+
+### 9. adk/intro/chatmodel/ - ChatModel Agent 进阶
 - [ ] 已完成该模块
 **学习目标**：掌握 ChatModelAgent 的高级用法和中断机制
 
 **前置知识**：`adk/helloworld`, `components/tool`
 
-**难度**：⭐⭐
+**难度**：⭐⭐⭐
 
 **核心内容**：
 - ChatModelAgent 使用
@@ -185,11 +267,16 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 **关键文件**：
 - `adk/intro/chatmodel/` 目录下的示例代码
 
+**学习检查点**：
+- [ ] 理解并实现中断机制
+- [ ] 掌握Agent状态管理
+- [ ] 能够设计复杂交互模式
+
 ---
 
 ## 🏗️ 高级 - 编排和工作流
 
-### 9. compose/chain/ - 链式编排
+### 10. compose/chain/ - 链式编排
 - [ ] 已完成该模块
 **学习目标**：学习线性工作流构建
 
@@ -206,7 +293,12 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 **关键文件**：
 - `compose/chain/main.go`
 
-### 10. compose/workflow/ - 工作流编排
+**学习检查点**：
+- [ ] 能够设计和实现链式处理流程
+- [ ] 理解数据在链中的流转机制
+- [ ] 掌握错误处理和传播策略
+
+### 11. compose/workflow/ - 工作流编排
 - [ ] 已完成该模块
 **学习目标**：掌握复杂业务流程自动化
 
@@ -230,13 +322,41 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `compose/workflow/5_static_values/` - 静态值
 - `compose/workflow/6_stream_field_map/` - 流式字段映射
 
-### 11. compose/graph/ - 图形化编排
+**学习检查点**：
+- [ ] 能够设计复杂的工作流
+- [ ] 掌握字段映射和条件分支
+- [ ] 理解数据流控制机制
+
+### 12. components/retriever/ - 数据检索
+- [ ] 已完成该模块
+**学习目标**：实现知识库和 RAG 系统
+
+**前置知识**：`components/document`
+
+**难度**：⭐⭐⭐⭐
+
+**核心内容**：
+- 向量数据库集成
+- 相似度搜索
+- 文档索引和检索
+- RAG 架构设计
+
+**关键文件**：
+- `components/retriever/multiquery/main.go`
+- `components/retriever/router/main.go`
+
+**学习检查点**：
+- [ ] 能够构建基础的RAG系统
+- [ ] 掌握向量检索的基本原理
+- [ ] 理解多查询检索策略
+
+### 13. compose/graph/ - 图形化编排
 - [ ] 已完成该模块
 **学习目标**：学习非线性流程和分支逻辑
 
-**前置知识**：`compose/workflow`
+**前置知识**：`compose/workflow`, `components/retriever`
 
-**难度**：⭐⭐⭐⭐
+**难度**：⭐⭐⭐⭐⭐
 
 **核心内容**：
 - 图结构定义
@@ -254,48 +374,43 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `compose/graph/tool_call_once/` - 单次工具调用
 - `compose/graph/two_model_chat/` - 双模型对话
 
-### 12. components/retriever/ - 数据检索
-- [ ] 已完成该模块
-**学习目标**：实现知识库和 RAG 系统
-
-**前置知识**：`components/document`
-
-**难度**：⭐⭐⭐
-
-**核心内容**：
-- 向量数据库集成
-- 相似度搜索
-- 文档索引和检索
-- RAG 架构设计
-
-**关键文件**：
-- `components/retriever/multiquery/main.go`
-- `components/retriever/router/main.go`
-
-### 13. components/document/ - 文档处理
-- [ ] 已完成该模块
-**学习目标**：学习各种文件格式解析和处理
-
-**前置知识**：`quickstart/chat`
-
-**难度**：⭐⭐⭐
-
-**核心内容**：
-- 多格式解析器（PDF、HTML、文本）
-- 文档加载器
-- 内容提取和转换
-- 文档分块策略
-
-**关键文件**：
-- `components/document/parser/extparser/` - 扩展格式解析器
-- `components/document/parser/textparser/` - 文本解析器
-- `components/document/parser/customparser/` - 自定义解析器
+**学习检查点**：
+- [ ] 能够设计复杂的图编排
+- [ ] 掌握ReAct模式的实现
+- [ ] 理解状态管理和中断机制
 
 ---
 
 ## 🚀 专家级 - 复杂系统架构
 
-### 14. flow/agent/ - 流式代理系统
+### 14. devops/debug/ - 调试与追踪
+- [ ] 已完成该模块
+**学习目标**：掌握 Eino 应用的调试、追踪与诊断技术
+
+**前置知识**：`compose/chain`, `compose/graph`, 基础 DevOps 知识
+
+**难度**：⭐⭐⭐
+
+**核心内容**：
+- 链式编排调试
+- 图编排调试
+- 日志与追踪
+- 问题定位与诊断
+- CozeLoop 集成（可选）
+
+**关键文件**：
+- `devops/debug/chain/` - 链式编排调试
+- `devops/debug/graph/` - 图编排调试
+- `devops/debug/main.go` - 调试工具入口
+
+**学习检查点**：
+- [ ] 能够调试链式和图编排应用
+- [ ] 掌握日志追踪技术
+- [ ] 具备问题定位和诊断能力
+
+**注意**：各示例项目中也包含日志和追踪实现，可结合学习
+
+### 15. flow/agent/ - 流式代理系统
 - [ ] 已完成该模块
 **学习目标**：构建基于流的智能体系统和复杂应用
 
@@ -316,13 +431,18 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `flow/agent/manus/` - Manus 智能体示例
 - `flow/agent/multiagent/` - 多智能体系统
 
-### 15. adk/intro/ - ADK 深入教程
+**学习检查点**：
+- [ ] 能够实现流式处理架构
+- [ ] 掌握事件驱动模式
+- [ ] 理解多智能体协作机制
+
+### 16. adk/intro/ - ADK 深入教程
 - [ ] 已完成该模块
 **学习目标**：掌握会话管理、工作流等高级特性
 
-**前置知识**：`adk/helloworld`, `compose/workflow`
+**前置知识**：`adk/helloworld`, `compose/workflow`, `flow/agent/react`
 
-**难度**：⭐⭐⭐⭐
+**难度**：⭐⭐⭐⭐⭐
 
 **核心内容**：
 - 会话状态管理
@@ -337,7 +457,12 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `transfer/` - 状态转换
 - `workflow/` - 工作流模式（包含 sequential、parallel、loop 等子目录）
 
-### 16. adk/multiagent/ - 多智能体系统
+**学习检查点**：
+- [ ] 掌握高级会话管理
+- [ ] 能够开发自定义Agent
+- [ ] 理解性能优化策略
+
+### 17. adk/multiagent/ - 多智能体系统
 - [ ] 已完成该模块
 **学习目标**：学习智能体协作和分布式 AI
 
@@ -359,48 +484,47 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 - `adk/multiagent/layered-supervisor/` - 分层 Supervisor
 - `adk/multiagent/integration-project-manager/` - 项目管理示例
 
-### 17. devops/debug/ - 调试与追踪
-- [ ] 已完成该模块
-**学习目标**：掌握 Eino 应用的调试、追踪与诊断技术
-
-**前置知识**：`compose/chain`, `compose/graph`, 基础 DevOps 知识
-
-**难度**：⭐⭐⭐
-
-**核心内容**：
-- 链式编排调试
-- 图编排调试
-- 日志与追踪
-- 问题定位与诊断
-- CozeLoop 集成（可选）
-
-**关键文件**：
-- `devops/debug/chain/` - 链式编排调试
-- `devops/debug/graph/` - 图编排调试
-- `devops/debug/main.go` - 调试工具入口
-
-**注意**：各示例项目中也包含日志和追踪实现，可结合学习
+**学习检查点**：
+- [ ] 能够设计多智能体架构
+- [ ] 掌握Supervisor协作模式
+- [ ] 理解复杂的多智能体通信协议
 
 ---
 
 ## 💡 学习建议
 
-### 学习节奏
-- **第1-2周**：完成入门级，掌握基础概念
-- **第3-4周**：学习中级，深入各个组件
-- **第5-6周**：研究高级，构建复杂应用
-- **第7-8周**：挑战专家级，设计架构方案
+### 🎯 学习节奏优化
+- **第1周**：完成预备阶段，环境搭建和概念理解
+- **第2-3周**：完成入门级，掌握基础概念和简单应用
+- **第4-6周**：学习中级，深入各个组件和功能扩展
+- **第7-10周**：研究高级，构建复杂编排和工作流
+- **第11-14周**：挑战专家级，设计复杂系统架构
+- **第15-16周**：实战项目开发和整合
 
-### 学习方法
+### 💪 学习策略
 1. **理论先行**：每个目录都有 README 文档，先阅读理解概念
 2. **代码实践**：运行示例代码，观察实际效果
 3. **修改实验**：基于示例进行修改，加深理解
 4. **项目应用**：结合实际项目需求进行练习
+5. **定期回顾**：每周总结学习成果，查漏补缺
 
-### 环境准备
-- Go 1.24+ 开发环境
-- API 密钥配置（OpenAI、Ollama 等）
-- Redis 等依赖服务（根据需要）
+### 🎓 学习里程碑
+- **🌱 入门里程碑**：能够独立构建简单聊天机器人
+- **🔧 中级里程碑**：能够集成工具构建任务代理
+- **🏗️ 高级里程碑**：能够设计复杂工作流和图编排
+- **🚀 专家里程碑**：能够构建多智能体系统
+
+### 🔧 环境准备
+- **开发环境**：Go 1.24+ 开发环境（推荐 go1.24.4 工具链）
+- **API配置**：API 密钥配置（OpenAI、Ollama、DeepSeek等）
+- **依赖服务**：Redis 等依赖服务（根据需要）
+- **开发工具**：IDE配置、调试工具、代码质量工具
+
+### 📚 学习资源推荐
+- **官方文档**：[Eino GitHub](https://github.com/cloudwego/eino)
+- **社区支持**：[CloudWeGo社区](https://www.cloudwego.io/)
+- **Go语言**：[Effective Go](https://go.dev/doc/effective_go)
+- **代码规范**：[Go Code Review Comments](https://github.com/golang/go/wiki/CodeReviewComments)
 
 ## 🔧 常见问题排查
 
@@ -425,65 +549,113 @@ Eino Examples 项目按学习难度分为四个等级，建议按此顺序学习
 
 ## 📌 学习检查清单
 
-### 入门级
-- **配置与运行**：能独立配置并运行 `quickstart/chat`
-- **工具调用**：理解并扩展 `quickstart/todoagent` 的工具逻辑
+### 📖 预备阶段
+- **环境搭建**：成功配置开发环境和依赖
+- **概念理解**：理解Eino框架核心架构
+- **文档阅读**：阅读主要文档和示例说明
+
+### 🌱 入门级
+- **基础聊天**：能独立配置并运行 `quickstart/chat`
+- **任务代理**：理解并扩展 `quickstart/todoagent` 的工具逻辑
+- **工具集成**：掌握 `components/tool` 的工具定义和使用
 - **ADK 基础**：使用 `adk/helloworld` 创建简单 Agent
 
-### 中级
+### 🔧 中级
 - **提示工程**：熟练使用 `components/prompt` 的模板与变量
-- **自定义函数**：掌握 `components/lambda` 的函数编排
+- **文档处理**：掌握 `components/document` 的解析和分块
+- **函数编排**：掌握 `components/lambda` 的函数编排
 - **增强助手**：扩展 `quickstart/eino_assistant` 实现多工具协同
 - **ChatModel Agent**：运行并理解 `adk/intro/chatmodel` 的中断机制
 
-### 高级
+### 🏗️ 高级
 - **链式编排**：能设计并实现 `compose/chain` 的自定义链路
 - **工作流设计**：掌握 `compose/workflow` 的分支与循环
+- **数据检索**：基于 `components/retriever` 完成知识检索
 - **图形编排**：能利用 `compose/graph` 构建复杂路由
-- **RAG 系统**：基于 `components/retriever` 完成知识检索
+- **调试技术**：在 `devops/debug` 中掌握调试和追踪
 
-### 专家级
-- **流式代理系统**：实现 `flow/agent` 的各种模式（ReAct、多智能体等）
-- **复杂图编排**：掌握 `compose/graph` 的所有编排模式
-- **多智能体架构**：设计 `adk/multiagent` 的协作策略（Supervisor、Plan-Execute-Replan）
-- **调试与追踪**：在 `devops/debug` 中掌握调试技术
+### 🚀 专家级
+- **流式代理**：实现 `flow/agent` 的各种模式（ReAct、事件驱动等）
+- **ADK深入**：掌握 `adk/intro` 的高级特性和自定义开发
+- **多智能体**：设计 `adk/multiagent` 的协作策略
+- **系统架构**：能够设计企业级AI应用架构
 
 ---
 
 ## 📝 进阶建议
 
-### 实战项目详细方案
+### 🎯 实战项目详细方案
 
-#### 1. 智能客服机器人
+#### 1. 智能客服机器人 ⭐⭐⭐
 - **技术栈**：`quickstart/chat` + `components/tool` + `components/retriever`
 - **关键能力**：多轮对话、FAQ 检索、业务 API 调用
+- **实现阶段**：
+  - 阶段1：基础聊天功能（quickstart/chat）
+  - 阶段2：工具集成和FAQ检索
+  - 阶段3：会话管理和个性化
 - **进阶方向**：结合 `flow/agent/react` 实现智能客服协同
-- **参考资源**：Eino Examples 的 chat 和 todoagent 项目
 
-#### 2. 文档分析系统
+#### 2. 文档分析系统 ⭐⭐⭐⭐
 - **技术栈**：`components/document` + `components/retriever` + `compose/workflow`
 - **关键能力**：文档解析、向量检索、自动生成报告
+- **实现阶段**：
+  - 阶段1：多格式文档解析
+  - 阶段2：向量化和检索系统
+  - 阶段3：智能报告生成
 - **进阶方向**：接入 `devops/debug` 监控任务执行和调试
-- **参考资源**：Eino Examples 的 document 和 retriever 项目
 
-#### 3. 智能助手平台
+#### 3. 智能助手平台 ⭐⭐⭐⭐⭐
 - **技术栈**：`quickstart/eino_assistant` + `compose/chain` + `adk/intro`
 - **关键能力**：多工具协同、流式响应、会话管理
+- **实现阶段**：
+  - 阶段1：增强型助手基础功能
+  - 阶段2：复杂工作流编排
+  - 阶段3：多模态能力和个性化
 - **进阶方向**：引入 `adk/multiagent` 实现协作助手
-- **参考资源**：Eino Examples 的 eino_assistant 和 adk/intro 项目
 
-#### 4. 自动化运营平台
-- **技术栈**：`compose/workflow` + `compose/graph` + `flow/agent`
-- **关键能力**：复杂流程编排、事件驱动、实时调度
-- **进阶方向**：加入 `devops/debug` 进行调试和监控
-- **参考资源**：Eino Examples 的 workflow、graph 和 flow/agent 项目
+#### 4. 企业级AI工作流平台 ⭐⭐⭐⭐⭐
+- **技术栈**：`compose/workflow` + `compose/graph` + `flow/agent` + `adk/multiagent`
+- **关键能力**：复杂流程编排、事件驱动、实时调度、多智能体协作
+- **实现阶段**：
+  - 阶段1：基础工作流引擎
+  - 阶段2：图形化编排界面
+  - 阶段3：多智能体协作系统
+  - 阶段4：企业级监控和治理
+- **进阶方向**：加入完整的DevOps和可观测性体系
 
-### 深入学习方向
-- **性能优化**：使用 Profiling 工具分析链路性能
-- **调试技术**：掌握 `devops/debug` 的调试方法和工具
-- **可观测性**：集成 CozeLoop、OpenTelemetry 等追踪方案（参考各示例中的实现）
+### 🚀 深入学习方向
+
+#### 🎯 技术深化
+- **性能优化**：使用 Profiling 工具分析链路性能，掌握内存和CPU优化
+- **调试技术**：深入掌握 `devops/debug` 的调试方法和工具
+- **可观测性**：集成 CozeLoop、OpenTelemetry 等追踪方案
+- **架构设计**：学习大规模AI应用的架构模式和最佳实践
+
+#### 🔧 工程实践
 - **扩展开发**：开发自定义组件与插件，贡献给生态
 - **生产部署**：学习容器化部署、CI/CD、灰度发布实践
+- **安全防护**：了解AI应用的安全威胁和防护措施
+- **测试策略**：掌握AI应用的测试方法和质量保证
+
+#### 🌐 生态建设
+- **社区参与**：参与Eino社区贡献，分享经验
+- **最佳实践**：总结和传播AI应用开发最佳实践
+- **技术分享**：撰写技术文章，进行技术演讲
+- **开源贡献**：为相关开源项目贡献代码和文档
+
+## 🎖️ 认证与评估
+
+### 📊 能力评估标准
+- **初级认证**：完成入门级所有模块，能够独立开发基础AI应用
+- **中级认证**：完成中级所有模块，能够设计和实现复杂AI功能
+- **高级认证**：完成高级所有模块，能够构建企业级AI系统
+- **专家认证**：完成专家级所有模块，能够设计AI应用架构
+
+### 🏆 项目展示建议
+- **GitHub作品集**：将学习项目整理到GitHub并完善文档
+- **技术博客**：撰写学习心得和技术总结
+- **开源贡献**：为Eino生态贡献代码或文档
+- **社区分享**：参与技术社区分享经验
 
 ## 📚 参考资源
 - [Eino 官方文档](https://github.com/cloudwego/eino)
