@@ -203,7 +203,7 @@ Eino Examples 项目按学习难度分为五个等级，建议按此顺序学习
 - `components/lambda/lambda.go`
 
 ### 7. components/document/ - 文档处理基础
-- [ ] 已完成该模块
+- [x] 已完成该模块
 **学习目标**：学习各种文件格式解析和处理
 
 **前置知识**：`quickstart/chat`
