@@ -40,7 +40,6 @@ import (
 	"github.com/coze-dev/cozeloop-go"
 
 	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/eino/einoagent"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/env"
 	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/mem"
 )
 
@@ -113,8 +112,6 @@ func main() {
 }
 
 func Init() error {
-	// check some essential envs
-	env.MustHasEnvs("ARK_CHAT_MODEL", "ARK_EMBEDDING_MODEL", "ARK_API_KEY")
 
 	ctx := context.Background()
 	os.MkdirAll("log", 0755)

@@ -18,19 +18,35 @@ package einoagent
 
 import (
 	"context"
+	"fmt"
 	"os"
 
-	"github.com/cloudwego/eino-ext/components/model/ark"
+	"github.com/cloudwego/eino-ext/components/model/openai"
 	"github.com/cloudwego/eino/components/model"
 )
 
 func newChatModel(ctx context.Context) (cm model.ChatModel, err error) {
 	// TODO Modify component configuration here.
-	config := &ark.ChatModelConfig{
-		Model:  os.Getenv("ARK_CHAT_MODEL"),
-		APIKey: os.Getenv("ARK_API_KEY"),
+	requiredEnvVars := []string{
+		"OPENAI_MODEL_NAME",
+		"OPENAI_API_KEY",
+		"OPENAI_BASE_URL",
 	}
-	cm, err = ark.NewChatModel(ctx, config)
+
+	for _, key := range requiredEnvVars {
+		if os.Getenv(key) == "" {
+			return nil, fmt.Errorf("environment variable %s is not set", key)
+		}
+	}
+
+	maxTokens := 2000
+	config := &openai.ChatModelConfig{
+		Model:     os.Getenv("OPENAI_MODEL_NAME"),
+		APIKey:    os.Getenv("OPENAI_API_KEY"),
+		BaseURL:   os.Getenv("OPENAI_BASE_URL"),
+		MaxTokens: &maxTokens,
+	}
+	cm, err = openai.NewChatModel(ctx, config)
 	if err != nil {
 		return nil, err
 	}

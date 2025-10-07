@@ -18,19 +18,33 @@ package einoagent
 
 import (
 	"context"
+	"fmt"
 	"os"
 
-	"github.com/cloudwego/eino-ext/components/embedding/ark"
+	"github.com/cloudwego/eino-ext/components/embedding/openai"
 	"github.com/cloudwego/eino/components/embedding"
 )
 
 func newEmbedding(ctx context.Context) (eb embedding.Embedder, err error) {
 	// TODO Modify component configuration here.
-	config := &ark.EmbeddingConfig{
-		Model:  os.Getenv("ARK_EMBEDDING_MODEL"),
-		APIKey: os.Getenv("ARK_API_KEY"),
+	requiredEnvVars := []string{
+		"OPENAI_EMBEDDING_MODEL",
+		"OPENAI_EMBEDDING_API_KEY",
+		"OPENAI_EMBEDDING_BASE_URL",
 	}
-	eb, err = ark.NewEmbedder(ctx, config)
+
+	for _, key := range requiredEnvVars {
+		if os.Getenv(key) == "" {
+			return nil, fmt.Errorf("environment variable %s is not set", key)
+		}
+	}
+
+	config := &openai.EmbeddingConfig{
+		Model:   os.Getenv("OPENAI_EMBEDDING_MODEL"),
+		APIKey:  os.Getenv("OPENAI_EMBEDDING_API_KEY"),
+		BaseURL: os.Getenv("OPENAI_EMBEDDING_BASE_URL"),
+	}
+	eb, err = openai.NewEmbedder(ctx, config)
 	if err != nil {
 		return nil, err
 	}

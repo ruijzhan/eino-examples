@@ -35,3 +35,7 @@ output/*
 # Vscode files
 .vscode
 .DS_Store
+
+# Memory data directory
+quickstart/eino_assistant/cmd/einoagentcli/data/memory/
+quickstart/eino_assistant/cmd/einoagentcli/data/task/

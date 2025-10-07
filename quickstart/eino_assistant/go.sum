@@ -54,12 +54,14 @@ github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20250225083
 github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20250225083118-fd27d80f189c/go.mod h1:dH/AWZbkt6ds9QK7usXS+911RxJF91b36NRh+GWBC80=
 github.com/cloudwego/eino-ext/components/document/transformer/splitter/markdown v0.0.0-20250225083118-fd27d80f189c h1:Aiu4WZveRawdt0UcXxG1Xg4hP6XaNj7Zi6N8wb4YEiM=
 github.com/cloudwego/eino-ext/components/document/transformer/splitter/markdown v0.0.0-20250225083118-fd27d80f189c/go.mod h1:ZSGOT8Mimy1mm8QOdVWmb3d7fBLWqRT28acVYxGdciQ=
-github.com/cloudwego/eino-ext/components/embedding/ark v0.0.0-20250225083118-fd27d80f189c h1:jAGkBcuTB/szoGQGNXaFsJgTbGKh008+LUT0N3GZ2pM=
-github.com/cloudwego/eino-ext/components/embedding/ark v0.0.0-20250225083118-fd27d80f189c/go.mod h1:xfLjO0stTs9PopgXSBmj8dmUDJLXEiuPESN1dDWT2so=
+github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20250225083118-fd27d80f189c h1:KyYAErlz70hGi9nbku75oe/atpi7SIHJO45Is5CjHL0=
+github.com/cloudwego/eino-ext/components/embedding/openai v0.0.0-20250225083118-fd27d80f189c/go.mod h1:95qDZeyDIH0h8i6G8zLkd/7hakKA2W3dnyuYCUTpbKc=
 github.com/cloudwego/eino-ext/components/indexer/redis v0.0.0-20250225083118-fd27d80f189c h1:58ajRmwJaTSBmDTNWAreZ4ZVQE8bEw0mM+Z5PlwIjLo=
 github.com/cloudwego/eino-ext/components/indexer/redis v0.0.0-20250225083118-fd27d80f189c/go.mod h1:KDaN8oztE3Cu2ZcV0zHufVBa13BhJVbbG5RDzXKYaoc=
 github.com/cloudwego/eino-ext/components/model/ark v0.0.0-20250225083118-fd27d80f189c h1:eEx1kvm+QaY9rk72A4dVWiQ3Aq66aipc6EhETCDZ+1s=
 github.com/cloudwego/eino-ext/components/model/ark v0.0.0-20250225083118-fd27d80f189c/go.mod h1:E+vZK+7zt8ntzEB1wIMlfBQq8dNyZASryzLtQX9q7bM=
+github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250225083118-fd27d80f189c h1:+NFX20BQs7rf878nGqoAVWHGW6HUFlzy6uu2ueS1vHo=
+github.com/cloudwego/eino-ext/components/model/openai v0.0.0-20250225083118-fd27d80f189c/go.mod h1:EUYfRsFwGKiIuGTkcJW7WaXGk74SvueSWLiVDirLJTI=
 github.com/cloudwego/eino-ext/components/retriever/redis v0.0.0-20250225083118-fd27d80f189c h1:/WS9PynViCEdBK+zUUteFRxqx82fvPOVcjmtNrqxJmU=
 github.com/cloudwego/eino-ext/components/retriever/redis v0.0.0-20250225083118-fd27d80f189c/go.mod h1:iU/5QoRRQK1GyldawI6BbogyuIqOPLDJct3zDIVWqJ8=
 github.com/cloudwego/eino-ext/components/tool/duckduckgo/v2 v2.0.0-20250707031732-1bfb5847488c h1:UNMGPz94z4r+iCE7PYPaI6kwfgfHJ642sKb5e8Pf4M4=
@@ -68,6 +70,8 @@ github.com/cloudwego/eino-ext/devops v0.1.7 h1:w8q4SGDtrZk+8WUrLyVidX7GNsyWFsYPP
 github.com/cloudwego/eino-ext/devops v0.1.7/go.mod h1:W53NPBmkmM7ClyQqwOcFUC2kV4bsvCfh2FtHUcyMzMY=
 github.com/cloudwego/eino-ext/libs/acl/langfuse v0.0.0-20250113033825-eb19b2b6b386 h1:dF//5iW+PCS8ZnZ0PwmO2enn3Oek++mbgB6dmaJAz6o=
 github.com/cloudwego/eino-ext/libs/acl/langfuse v0.0.0-20250113033825-eb19b2b6b386/go.mod h1:77jqGUJZjxg+V/sJ8S6dd0JtRLO782yVWHmhuFgb9ig=
+github.com/cloudwego/eino-ext/libs/acl/openai v0.0.0-20250221090944-e8ef7aabbe10 h1:M6Z2PeX+MxW7jgoZ0p6qDfVtMe1/4XqSQSAHUrI2HTM=
+github.com/cloudwego/eino-ext/libs/acl/openai v0.0.0-20250221090944-e8ef7aabbe10/go.mod h1:6CThw1XQx/ASXNt31yuvp0X4Yp4GprknQuIvP9VKDpw=
 github.com/cloudwego/eino-ext/libs/acl/opentelemetry v0.0.0-20250225080340-5935633151d3 h1:p1hlOXmAj1yIhJl3JRvwP+9WtEhuOnn6H+lIXIMeDzU=
 github.com/cloudwego/eino-ext/libs/acl/opentelemetry v0.0.0-20250225080340-5935633151d3/go.mod h1:YeW4PJOQPzvjZWRnSXotbllWZaIu3drWRzRTpELoc80=
 github.com/cloudwego/hertz v0.9.5 h1:FXV2YFLrNHRdpwT+OoIvv0wEHUC0Bo68CDPujr6VnWo=
@@ -255,6 +259,8 @@ github.com/redis/go-redis/v9 v9.7.0/go.mod h1:f6zhXITC7JUJIlPEiBOTXxJgPLdZcA93Ge
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/rollbar/rollbar-go v1.0.2/go.mod h1:AcFs5f0I+c71bpHlXNNDbOWJiKwjFDtISeXco0L5PKQ=
+github.com/sashabaranov/go-openai v1.32.5 h1:/eNVa8KzlE7mJdKPZDj6886MUzZQjoVHyn0sLvIt5qA=
+github.com/sashabaranov/go-openai v1.32.5/go.mod h1:lj5b/K+zjTSFxVLijLSTDZuP7adOgerWeFyZLUhAKRg=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=

@@ -38,7 +38,7 @@ import (
 
 func init() {
 	// check some essential envs
-	env.MustHasEnvs("ARK_API_KEY", "ARK_EMBEDDING_MODEL")
+	env.MustHasEnvs("OPENAI_API_KEY")
 }
 
 func main() {
