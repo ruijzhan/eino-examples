@@ -162,11 +162,11 @@ func reactAgentLambda(ctx context.Context) (lba *compose.Lambda, err error) {
     }
 
     // 2. 设置 ChatModel
-    chatModelIns11, err := newChatModel(ctx)
+    chatModel, err := newChatModel(ctx)
     if err != nil {
         return nil, err
     }
-    config.Model = chatModelIns11
+    config.Model = chatModel
 
     // 3. 集成工具集
     tools, err := GetTools(ctx)

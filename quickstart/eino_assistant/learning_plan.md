@@ -148,14 +148,20 @@ config := &react.AgentConfig{
     ToolReturnDirectly: map[string]struct{}{}
 }
 
+chatModel, err := newChatModel(ctx)
+if err != nil {
+    return nil, err
+}
+config.Model = chatModel
+
 // 工具集成
 config.ToolsConfig.Tools = tools
 ```
 
 #### ✅ 验证标准
-- [ ] 理解 ReAct 模式的核心概念
-- [ ] 能够解释 Agent 的决策过程
-- [ ] 掌握工具系统的实现原理
+- [x] 理解 ReAct 模式的核心概念
+- [x] 能够解释 Agent 的决策过程
+- [x] 掌握工具系统的实现原理
 
 ### 第 4 阶段：知识检索系统 (2 天)
 
@@ -383,12 +389,12 @@ func (t *CustomTool) Invoke(ctx context.Context, req *CustomRequest) (*CustomRes
 
 ### ✅ 最新学习记录
 - **日期** 2025-10-19
-- **学习阶段** 第 2 阶段：环境搭建与运行
-- **学习内容** 使用 `run_eino_assistant.sh` 启动 `cmd/einoagentcli`，完成环境变量和依赖配置
-- **关键收获** 成功运行 CLI，实现对话与工具调用链路的端到端验证
-- **遇到问题** 初次执行时因 vendor 目录未同步导致依赖冲突
-- **解决方案** 在根目录更新 vendor，并从子模块上下文运行脚本
-- **明日计划** 开始第 5 阶段的工具系统开发
+- **学习阶段** 第 3 阶段：ReAct Agent 深入
+- **学习内容** 调整 `eino/einoagent/flow.go` 的 ReAct Agent 初始化命名，并同步更新 `learning_plan.md` 中的关键代码片段
+- **关键收获** 熟悉 `newChatModel()` 的配置流程，明确模型注入与工具集成顺序
+- **遇到问题** 缺少文档描述最新代码逻辑
+- **解决方案** 在学习计划中补充最新的代码片段
+- **明日计划** 继续梳理工具系统与 ReAct Agent 的交互细节
 
 ### 🎯 技能掌握自评
 - [ ] ReAct Agent 设计和实现 ⭐⭐⭐⭐⭐

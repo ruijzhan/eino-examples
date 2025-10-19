@@ -29,11 +29,11 @@ func reactAgentLambda(ctx context.Context) (lba *compose.Lambda, err error) {
 	config := &react.AgentConfig{
 		MaxStep:            25,
 		ToolReturnDirectly: map[string]struct{}{}}
-	chatModelIns11, err := newChatModel(ctx)
+	chatModel, err := newChatModel(ctx)
 	if err != nil {
 		return nil, err
 	}
-	config.Model = chatModelIns11
+	config.Model = chatModel
 	tools, err := GetTools(ctx)
 	if err != nil {
 		return nil, err
