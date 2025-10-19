@@ -30,8 +30,8 @@ import (
 	"github.com/cloudwego/eino/components/retriever"
 )
 
-// newRetriever component initialization function of node 'RedisRetriever' in graph 'EinoAgent'
-func newRetriever(ctx context.Context) (rtr retriever.Retriever, err error) {
+// buildRedisRetriever component initialization function of node 'RedisRetriever' in graph 'EinoAgent'
+func buildRedisRetriever(ctx context.Context) (rtr retriever.Retriever, err error) {
 	// TODO Modify component configuration here.
 	redisAddr := os.Getenv("REDIS_ADDR")
 	redisClient := redisCli.NewClient(&redisCli.Options{

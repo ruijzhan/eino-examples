@@ -62,7 +62,7 @@ type ChatTemplateConfig struct {
 }
 
 // newChatTemplate component initialization function of node 'ChatTemplate' in graph 'EinoAgent'
-func newChatTemplate(ctx context.Context) (ctp prompt.ChatTemplate, err error) {
+func newChatTemplate(_ context.Context) (ctp prompt.ChatTemplate, err error) {
 	// TODO Modify component configuration here.
 	config := &ChatTemplateConfig{
 		FormatType: schema.FString,

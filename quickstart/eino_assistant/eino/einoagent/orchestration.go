@@ -32,30 +32,40 @@ func BuildEinoAgent(ctx context.Context) (r compose.Runnable[*UserMessage, *sche
 		InputToHistory = "InputToHistory"
 	)
 	g := compose.NewGraph[*UserMessage, *schema.Message]()
-	_ = g.AddLambdaNode(InputToQuery, compose.InvokableLambdaWithOption(newLambda), compose.WithNodeName("UserMessageToQuery"))
+
+	// 输入起点：并行构建查询与上下文变量
+	_ = g.AddLambdaNode(InputToQuery, compose.InvokableLambdaWithOption(userMessageToQueryLambda), compose.WithNodeName("UserMessageToQuery"))
+	_ = g.AddEdge(compose.START, InputToQuery)
+
+	// 上下文变量节点：提取历史消息并与起点连接
+	_ = g.AddLambdaNode(InputToHistory, compose.InvokableLambdaWithOption(userMessageToVariablesLambda), compose.WithNodeName("UserMessageToVariables"))
+	_ = g.AddEdge(compose.START, InputToHistory)
+
+	// 检索链路：查询 → 检索器 → 模板
+	redisRetrieverKeyOfRetriever, err := buildRedisRetriever(ctx)
+	if err != nil {
+		return nil, err
+	}
+	_ = g.AddRetrieverNode(RedisRetriever, redisRetrieverKeyOfRetriever, compose.WithOutputKey("documents"))
+	_ = g.AddEdge(InputToQuery, RedisRetriever)
+
 	chatTemplateKeyOfChatTemplate, err := newChatTemplate(ctx)
 	if err != nil {
 		return nil, err
 	}
 	_ = g.AddChatTemplateNode(ChatTemplate, chatTemplateKeyOfChatTemplate)
-	reactAgentKeyOfLambda, err := newLambda1(ctx)
+	_ = g.AddEdge(RedisRetriever, ChatTemplate)
+	_ = g.AddEdge(InputToHistory, ChatTemplate)
+
+	// 推理节点：ReAct 代理
+	reactAgentKeyOfLambda, err := reactAgentLambda(ctx)
 	if err != nil {
 		return nil, err
 	}
 	_ = g.AddLambdaNode(ReactAgent, reactAgentKeyOfLambda, compose.WithNodeName("ReAct Agent"))
-	redisRetrieverKeyOfRetriever, err := newRetriever(ctx)
-	if err != nil {
-		return nil, err
-	}
-	_ = g.AddRetrieverNode(RedisRetriever, redisRetrieverKeyOfRetriever, compose.WithOutputKey("documents"))
-	_ = g.AddLambdaNode(InputToHistory, compose.InvokableLambdaWithOption(newLambda2), compose.WithNodeName("UserMessageToVariables"))
-	_ = g.AddEdge(compose.START, InputToQuery)
-	_ = g.AddEdge(compose.START, InputToHistory)
-	_ = g.AddEdge(ReactAgent, compose.END)
-	_ = g.AddEdge(InputToQuery, RedisRetriever)
-	_ = g.AddEdge(RedisRetriever, ChatTemplate)
-	_ = g.AddEdge(InputToHistory, ChatTemplate)
 	_ = g.AddEdge(ChatTemplate, ReactAgent)
+	_ = g.AddEdge(ReactAgent, compose.END)
+
 	r, err = g.Compile(ctx, compose.WithGraphName("EinoAgent"), compose.WithNodeTriggerMode(compose.AllPredecessor))
 	if err != nil {
 		return nil, err

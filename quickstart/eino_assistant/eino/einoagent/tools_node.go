@@ -62,7 +62,7 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 	}, nil
 }
 
-func defaultDDGSearchConfig(ctx context.Context) (*duckduckgo.Config, error) {
+func defaultDDGSearchConfig(_ context.Context) (*duckduckgo.Config, error) {
 	config := &duckduckgo.Config{}
 	return config, nil
 }
