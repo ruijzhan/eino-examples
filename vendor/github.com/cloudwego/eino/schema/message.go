@@ -143,6 +143,103 @@ const (
 	ImageURLDetailAuto ImageURLDetail = "auto"
 )
 
+// MessagePartCommon represents the common abstract components for input and output of multi-modal types.
+type MessagePartCommon struct {
+	// URL can either be a traditional URL or a special URL conforming to RFC-2397 (https://www.rfc-editor.org/rfc/rfc2397).
+	// double check with model implementations for detailed instructions on how to use this.
+	URL *string `json:"url,omitempty"`
+
+	// Base64Data represents the binary data in Base64 encoded string format.
+	Base64Data *string `json:"base64data,omitempty"`
+
+	// MIMEType is the mime type , eg."image/png",""audio/wav" etc.
+	MIMEType string `json:"mime_type,omitempty"`
+
+	// Extra is used to store extra information.
+	Extra map[string]any `json:"extra,omitempty"`
+}
+
+// MessageInputImage is used to represent an image part in message.
+// Choose either URL or Base64Data.
+type MessageInputImage struct {
+	MessagePartCommon
+
+	// Detail is the quality of the image url.
+	Detail ImageURLDetail `json:"detail,omitempty"`
+}
+
+// MessageInputAudio is used to represent an audio part in message.
+// Choose either URL or Base64Data.
+type MessageInputAudio struct {
+	MessagePartCommon
+}
+
+// MessageInputVideo is used to represent a video part in message.
+// Choose either URL or Base64Data.
+type MessageInputVideo struct {
+	MessagePartCommon
+}
+
+// MessageInputFile is used to represent a file part in message.
+// Choose either URL or Base64Data.
+type MessageInputFile struct {
+	MessagePartCommon
+}
+
+// MessageInputPart represents the input part of message.
+type MessageInputPart struct {
+	Type ChatMessagePartType `json:"type"`
+
+	Text string `json:"text,omitempty"`
+
+	// Image is the image input of the part, it's used when Type is "image_url".
+	Image *MessageInputImage `json:"image,omitempty"`
+
+	// Audio  is the audio input of the part, it's used when Type is "audio_url".
+	Audio *MessageInputAudio `json:"audio,omitempty"`
+
+	// Video is the video input of the part, it's used when Type is "video_url".
+	Video *MessageInputVideo `json:"video,omitempty"`
+
+	// File is the file input of the part, it's used when Type is "file_url".
+	File *MessageInputFile `json:"file,omitempty"`
+}
+
+// MessageOutputImage is used to represent an image part in message.
+type MessageOutputImage struct {
+	MessagePartCommon
+}
+
+// MessageOutputAudio is used to represent an audio part in message.
+type MessageOutputAudio struct {
+	MessagePartCommon
+}
+
+// MessageOutputVideo is used to represent a video part in message.
+type MessageOutputVideo struct {
+	MessagePartCommon
+}
+
+// MessageOutputPart represents a part of an assistant-generated message.
+// It can contain text, or multimedia content like images, audio, or video.
+type MessageOutputPart struct {
+	// Type is the type of the part, eg. "text", "image_url", "audio_url", "video_url".
+	Type ChatMessagePartType `json:"type"`
+
+	// Text is the text of the part, it's used when Type is "text".
+	Text string `json:"text,omitempty"`
+
+	// Image is the image output of the part, used when Type is ChatMessagePartTypeImageURL.
+	Image *MessageOutputImage `json:"image,omitempty"`
+
+	// Audio is the audio output of the part, used when Type is ChatMessagePartTypeAudioURL.
+	Audio *MessageOutputAudio `json:"audio,omitempty"`
+
+	// Video is the video output of the part, used when Type is ChatMessagePartTypeVideoURL.
+	Video *MessageOutputVideo `json:"video,omitempty"`
+}
+
+// Deprecated: This struct is deprecated as the MultiContent field is deprecated.
 // ChatMessageImageURL is used to represent an image part in a chat message.
 // Choose either URL or URI.
 // If your model implementation supports it, URL could be used to embed inline image data as defined in RFC-2397.
@@ -150,6 +247,7 @@ type ChatMessageImageURL struct {
 	// URL can either be a traditional URL or a special URL conforming to RFC-2397 (https://www.rfc-editor.org/rfc/rfc2397).
 	// double check with model implementations for detailed instructions on how to use this.
 	URL string `json:"url,omitempty"`
+
 	URI string `json:"uri,omitempty"`
 	// Detail is the quality of the image url.
 	Detail ImageURLDetail `json:"detail,omitempty"`
@@ -176,6 +274,7 @@ const (
 	ChatMessagePartTypeFileURL ChatMessagePartType = "file_url"
 )
 
+// Deprecated: This struct is deprecated as the MultiContent field is deprecated.
 // ChatMessageAudioURL is used to represent an audio part in a chat message.
 // Choose either URL or URI.
 // If your model implementation supports it, URL could be used to embed inline audio data as defined in RFC-2397.
@@ -191,6 +290,7 @@ type ChatMessageAudioURL struct {
 	Extra map[string]any `json:"extra,omitempty"`
 }
 
+// Deprecated: This struct is deprecated as the MultiContent field is deprecated.
 // ChatMessageVideoURL is used to represent an video part in a chat message.
 // Choose either URL or URI.
 // If your model implementation supports it, URL could be used to embed inline video data as defined in RFC-2397.
@@ -206,6 +306,7 @@ type ChatMessageVideoURL struct {
 	Extra map[string]any `json:"extra,omitempty"`
 }
 
+// Deprecated: This struct is deprecated as the MultiContent field is deprecated.
 // ChatMessageFileURL is used to represent an file part in a chat message.
 // Choose either URL or URI.
 type ChatMessageFileURL struct {
@@ -221,6 +322,7 @@ type ChatMessageFileURL struct {
 	Extra map[string]any `json:"extra,omitempty"`
 }
 
+// Deprecated: This struct is deprecated as the MultiContent field is deprecated.
 // ChatMessagePart is the part in a chat message.
 type ChatMessagePart struct {
 	// Type is the type of the part, eg. "text", "image_url", "audio_url", "video_url", "file_url".
@@ -294,7 +396,12 @@ type Message struct {
 
 	// if MultiContent is not empty, use this instead of Content
 	// if MultiContent is empty, use Content
+	// Deprecated: will no longer be maintained use UserInputMultiContent instead.
 	MultiContent []ChatMessagePart `json:"multi_content,omitempty"`
+
+	UserInputMultiContent []MessageInputPart `json:"user_input_multi_content,omitempty"`
+
+	AssistantGenMultiContent []MessageOutputPart `json:"assistant_output_multi_content,omitempty"`
 
 	Name string `json:"name,omitempty"`
 
@@ -575,6 +682,7 @@ func UserMessage(content string) *Message {
 		Role:    User,
 		Content: content,
 	}
+
 }
 
 type toolMessageOptions struct {
@@ -689,6 +797,111 @@ func concatToolCalls(chunks []ToolCall) ([]ToolCall, error) {
 	return merged, nil
 }
 
+func isBase64AudioPart(part MessageOutputPart) bool {
+	return part.Type == ChatMessagePartTypeAudioURL &&
+		part.Audio != nil &&
+		part.Audio.Base64Data != nil &&
+		part.Audio.URL == nil
+}
+
+func concatAssistantMultiContent(parts []MessageOutputPart) ([]MessageOutputPart, error) {
+	if len(parts) == 0 {
+		return parts, nil
+	}
+
+	merged := make([]MessageOutputPart, 0, len(parts))
+	i := 0
+	for i < len(parts) {
+		currentPart := parts[i]
+		start := i
+
+		if currentPart.Type == ChatMessagePartTypeText {
+			// --- Text Merging ---
+			// Find end of contiguous text block
+			end := start + 1
+			for end < len(parts) && parts[end].Type == ChatMessagePartTypeText {
+				end++
+			}
+
+			// If only one part, just append it
+			if end == start+1 {
+				merged = append(merged, currentPart)
+			} else {
+				// Multiple parts to merge
+				var sb strings.Builder
+				for k := start; k < end; k++ {
+					sb.WriteString(parts[k].Text)
+				}
+				mergedPart := MessageOutputPart{
+					Type: ChatMessagePartTypeText,
+					Text: sb.String(),
+				}
+				merged = append(merged, mergedPart)
+			}
+			i = end
+		} else if isBase64AudioPart(currentPart) {
+			// --- Audio Merging ---
+			// Find end of contiguous audio block
+			end := start + 1
+			for end < len(parts) && isBase64AudioPart(parts[end]) {
+				end++
+			}
+
+			// If only one part, just append it
+			if end == start+1 {
+				merged = append(merged, currentPart)
+			} else {
+				// Multiple parts to merge
+				var b64Builder strings.Builder
+				var mimeType string
+				extraList := make([]map[string]any, 0, end-start)
+
+				for k := start; k < end; k++ {
+					audioPart := parts[k].Audio
+					if audioPart.Base64Data != nil {
+						b64Builder.WriteString(*audioPart.Base64Data)
+					}
+					if mimeType == "" {
+						mimeType = audioPart.MIMEType
+					}
+					if len(audioPart.Extra) > 0 {
+						extraList = append(extraList, audioPart.Extra)
+					}
+				}
+
+				var mergedExtra map[string]any
+				var err error
+				if len(extraList) > 0 {
+					mergedExtra, err = concatExtra(extraList)
+					if err != nil {
+						return nil, fmt.Errorf("failed to concat audio extra: %w", err)
+					}
+				}
+
+				mergedB64 := b64Builder.String()
+				mergedPart := MessageOutputPart{
+					Type: ChatMessagePartTypeAudioURL,
+					Audio: &MessageOutputAudio{
+						MessagePartCommon: MessagePartCommon{
+							Base64Data: &mergedB64,
+							MIMEType:   mimeType,
+							Extra:      mergedExtra,
+						},
+					},
+				}
+				merged = append(merged, mergedPart)
+			}
+			i = end
+		} else {
+			// --- Non-mergeable part ---
+			merged = append(merged, currentPart)
+			i++
+		}
+	}
+
+	return merged, nil
+}
+
 func concatExtra(extraList []map[string]any) (map[string]any, error) {
 	if len(extraList) == 1 {
 		return generic.CopyMap(extraList[0]), nil
@@ -716,13 +929,15 @@ func concatExtra(extraList []map[string]any) (map[string]any, error) {
 // concatedMsg, err := ConcatMessages(msgs) // concatedMsg.Content will be full content of all messages
 func ConcatMessages(msgs []*Message) (*Message, error) {
 	var (
-		contents            []string
-		contentLen          int
-		reasoningContents   []string
-		reasoningContentLen int
-		toolCalls           []ToolCall
-		ret                 = Message{}
-		extraList           = make([]map[string]any, 0, len(msgs))
+		contents                      []string
+		contentLen                    int
+		reasoningContents             []string
+		reasoningContentLen           int
+		toolCalls                     []ToolCall
+		multiContentParts             []ChatMessagePart
+		assistantGenMultiContentParts []MessageOutputPart
+		ret                           = Message{}
+		extraList                     = make([]map[string]any, 0, len(msgs))
 	)
 
 	for idx, msg := range msgs {
@@ -782,9 +997,13 @@ func ConcatMessages(msgs []*Message) (*Message, error) {
 			extraList = append(extraList, msg.Extra)
 		}
 
-		// There's no scenario that requires to concat messages with MultiContent currently
+		// The 'MultiContent' field is deprecated but is kept for backward compatibility.
 		if len(msg.MultiContent) > 0 {
-			ret.MultiContent = msg.MultiContent
+			multiContentParts = append(multiContentParts, msg.MultiContent...)
+		}
+
+		if len(msg.AssistantGenMultiContent) > 0 {
+			assistantGenMultiContentParts = append(assistantGenMultiContentParts, msg.AssistantGenMultiContent...)
 		}
 
 		if msg.ResponseMeta != nil && ret.ResponseMeta == nil {
@@ -872,6 +1091,18 @@ func ConcatMessages(msgs []*Message) (*Message, error) {
 		if len(extra) > 0 {
 			ret.Extra = extra
 		}
+	}
+
+	if len(multiContentParts) > 0 {
+		ret.MultiContent = multiContentParts
+	}
+
+	if len(assistantGenMultiContentParts) > 0 {
+		merged, err := concatAssistantMultiContent(assistantGenMultiContentParts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to concat message's assistant multi content: %w", err)
+		}
+		ret.AssistantGenMultiContent = merged
 	}
 
 	return &ret, nil
